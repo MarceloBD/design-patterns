@@ -42,23 +42,29 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const phaseId = entry.target.getAttribute("data-phase");
-          if (phaseId && entry.isIntersecting && entry.intersectionRatio >= 0.6) {
-            setVisiblePhases((previous) => new Set([...previous, phaseId]));
-          }
-        });
-      },
-      { threshold: 0.6, rootMargin: "0px 0px -10% 0px" }
-    );
+    function checkSections() {
+      const sections = document.querySelectorAll("[data-phase]");
+      sections.forEach((section) => {
+        const phaseId = section.getAttribute("data-phase");
+        if (!phaseId) return;
+        const rect = section.getBoundingClientRect();
+        const sectionBottom = rect.bottom;
+        const viewportHeight = window.innerHeight;
+        if (sectionBottom < viewportHeight * 0.4) {
+          setVisiblePhases((previous) => {
+            if (previous.has(phaseId)) return previous;
+            return new Set([...previous, phaseId]);
+          });
+        }
+      });
+    }
 
-    const sections = document.querySelectorAll("[data-phase]");
-    sections.forEach((section) => observer.observe(section));
+    window.addEventListener("scroll", checkSections, { passive: true });
+    checkSections();
+
     return () => {
-      observer.disconnect();
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", checkSections);
     };
   }, []);
 

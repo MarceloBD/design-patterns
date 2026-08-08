@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useSyncExternalStore } from "react";
 import { PlayerState } from "@/types/player";
 import { PatternCategory, PatternStatus } from "@/types/pattern";
 import { QuizResult } from "@/types/quiz";
@@ -22,44 +22,77 @@ import {
   collectCoin,
 } from "@/stores/gameStore";
 
+type Listener = () => void;
+
+const listeners = new Set<Listener>();
+let globalPlayer: PlayerState = loadPlayerState();
+let hydrated = false;
+
+function emitChange() {
+  listeners.forEach((listener) => listener());
+}
+
+function subscribe(listener: Listener): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+function getSnapshot(): PlayerState {
+  return globalPlayer;
+}
+
+function getServerSnapshot(): PlayerState {
+  return loadPlayerState();
+}
+
+function persistGlobal(newState: PlayerState) {
+  globalPlayer = newState;
+  savePlayerState(newState);
+  emitChange();
+}
+
 export function useGameStore() {
-  const [player, setPlayer] = useState<PlayerState>(loadPlayerState);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const player = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [isHydrated, setIsHydrated] = useState(hydrated);
   const playerRef = useRef(player);
   playerRef.current = player;
 
   useEffect(() => {
-    setPlayer(loadPlayerState());
+    if (!hydrated) {
+      globalPlayer = loadPlayerState();
+      hydrated = true;
+      emitChange();
+    }
     setIsHydrated(true);
   }, []);
 
   const persist = useCallback((newState: PlayerState) => {
-    setPlayer(newState);
-    playerRef.current = newState;
-    savePlayerState(newState);
+    persistGlobal(newState);
   }, []);
 
   const handleReadPattern = useCallback(
     (patternSlug: string): number => {
-      if (player.readPatterns.includes(patternSlug)) {
+      const current = playerRef.current;
+      if (current.readPatterns.includes(patternSlug)) {
         return 0;
       }
-      let state = markPatternRead(player, patternSlug);
+      let state = markPatternRead(current, patternSlug);
       state = addXp(state, XP_REWARDS.READ_PATTERN);
       state = updateStreak(state);
       persist(state);
       return XP_REWARDS.READ_PATTERN;
     },
-    [player, persist]
+    [persist]
   );
 
   const handleQuizComplete = useCallback(
     (result: QuizResult): { xpEarned: number; badgesEarned: string[]; leveledUp: boolean } => {
-      const previousLevel = player.level;
+      const current = playerRef.current;
+      const previousLevel = current.level;
       const badgesEarned: string[] = [];
       let xpEarned = 0;
 
-      let state = saveQuizScore(player, result.patternSlug, result.percentage);
+      let state = saveQuizScore(current, result.patternSlug, result.percentage);
 
       if (result.passed) {
         xpEarned += XP_REWARDS.QUIZ_PASS;
@@ -111,31 +144,33 @@ export function useGameStore() {
         leveledUp: state.level > previousLevel,
       };
     },
-    [player, persist]
+    [persist]
   );
 
   const handleSetName = useCallback(
     (name: string) => {
-      persist(setPlayerName(player, name));
+      persist(setPlayerName(playerRef.current, name));
     },
-    [player, persist]
+    [persist]
   );
 
   const handleReset = useCallback(() => {
     resetPlayerState();
-    setPlayer(loadPlayerState());
+    globalPlayer = loadPlayerState();
+    hydrated = true;
+    emitChange();
   }, []);
 
   const getStatus = useCallback(
     (patternSlug: string): PatternStatus => {
-      return getPatternStatus(player, patternSlug);
+      return getPatternStatus(playerRef.current, patternSlug);
     },
     [player]
   );
 
   const getProgress = useCallback(
     (category: PatternCategory) => {
-      return getRealmProgress(player, category);
+      return getRealmProgress(playerRef.current, category);
     },
     [player]
   );
