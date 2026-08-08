@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-c" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a0500"/>
+      <stop offset="40%" stop-color="#2d0a00"/>
+      <stop offset="100%" stop-color="#0d0400"/>
+    </linearGradient>
+    <radialGradient id="lava-glow" cx="50%" cy="85%" r="40%">
+      <stop offset="0%" stop-color="#ff4400" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="500" fill="url(#sky-c)"/>
+  <rect width="1200" height="500" fill="url(#lava-glow)"/>
+  <!-- Mountains -->
+  <polygon points="0,400 150,180 300,380 0,500" fill="#1a0800" opacity="0.8"/>
+  <polygon points="200,420 400,150 600,400 200,500" fill="#2d0800" opacity="0.7"/>
+  <polygon points="500,430 750,120 1000,410 500,500" fill="#1a0600" opacity="0.8"/>
+  <polygon points="800,420 1050,160 1200,380 1200,500 800,500" fill="#2d0a00" opacity="0.7"/>
+  <!-- Volcano peaks with lava -->
+  <polygon points="350,400 450,220 550,400" fill="#330800" opacity="0.9"/>
+  <ellipse cx="450" cy="220" rx="25" ry="8" fill="#ff4400" opacity="0.5"/>
+  <polygon points="850,380 950,180 1050,380" fill="#330800" opacity="0.9"/>
+  <ellipse cx="950" cy="180" rx="20" ry="6" fill="#ff6600" opacity="0.4"/>
+  <!-- Lava rivers -->
+  <path d="M100,500 Q200,450 350,480 Q500,460 600,500" fill="none" stroke="#ff4400" stroke-width="3" opacity="0.3"/>
+  <path d="M700,500 Q800,470 950,490 Q1100,470 1200,500" fill="none" stroke="#ff6600" stroke-width="2" opacity="0.25"/>
+  <!-- Ember particles -->
+  <circle cx="200" cy="300" r="2" fill="#ff8844" opacity="0.6"/>
+  <circle cx="450" cy="250" r="1.5" fill="#ffaa00" opacity="0.5"/>
+  <circle cx="700" cy="280" r="2" fill="#ff6600" opacity="0.4"/>
+  <circle cx="900" cy="220" r="1.5" fill="#ff8844" opacity="0.5"/>
+  <circle cx="1100" cy="300" r="2" fill="#ffaa00" opacity="0.3"/>
+  <!-- Forge structures -->
+  <rect x="580" y="350" width="40" height="80" fill="#1a0800" opacity="0.6"/>
+  <rect x="575" y="340" width="50" height="15" fill="#2d0a00" opacity="0.7"/>
+  <rect x="590" y="320" width="20" height="25" fill="#1a0600" opacity="0.5"/>
+  <ellipse cx="600" cy="318" rx="8" ry="4" fill="#ff4400" opacity="0.3"/>
+</svg>

@@ -1,0 +1,43 @@
+# Design Patterns Quest
+
+> A gamified learning platform for mastering all 22 Gang of Four (GoF) design patterns through an RPG adventure with interactive quizzes, XP rewards, and TypeScript code examples.
+
+## Creational Patterns
+
+- [Factory Method](/quest/factory-method): Let subclasses decide which object to create
+- [Abstract Factory](/quest/abstract-factory): Create families of related objects without specifying their concrete classes
+- [Builder](/quest/builder): Construct complex objects step by step
+- [Prototype](/quest/prototype): Clone existing objects without coupling to their classes
+- [Singleton](/quest/singleton): Ensure a class has only one instance with a global access point
+
+## Structural Patterns
+
+- [Adapter](/quest/adapter): Make incompatible interfaces work together
+- [Bridge](/quest/bridge): Split a large class into two separate hierarchies that can evolve independently
+- [Composite](/quest/composite): Compose objects into tree structures and treat them uniformly
+- [Decorator](/quest/decorator): Attach new behaviors to objects by wrapping them
+- [Facade](/quest/facade): Provide a simplified interface to a complex subsystem
+- [Flyweight](/quest/flyweight): Share common state between multiple objects to save memory
+- [Proxy](/quest/proxy): Provide a substitute that controls access to another object
+
+## Behavioral Patterns
+
+- [Chain of Responsibility](/quest/chain-of-responsibility): Pass requests along a chain of handlers until one handles it
+- [Command](/quest/command): Turn requests into stand-alone objects with all request info
+- [Iterator](/quest/iterator): Traverse a collection without exposing its internal structure
+- [Mediator](/quest/mediator): Reduce chaotic dependencies by centralizing communication
+- [Memento](/quest/memento): Save and restore an object's previous state (undo)
+- [Observer](/quest/observer): Notify multiple objects about changes in another object
+- [State](/quest/state): Let an object change its behavior when its internal state changes
+- [Strategy](/quest/strategy): Define a family of interchangeable algorithms
+- [Template Method](/quest/template-method): Define the skeleton of an algorithm, letting subclasses fill in steps
+- [Visitor](/quest/visitor): Separate algorithms from the objects they operate on
+
+## How It Works
+
+This platform teaches design patterns through gamification:
+1. Choose a realm (Creational, Structural, or Behavioral)
+2. Complete pattern quests that include explanations, analogies, and TypeScript examples
+3. Pass interactive quizzes to earn XP and unlock the next pattern
+4. Track progress via the interactive Skill Tree
+5. Earn badges and level up as you master more patterns

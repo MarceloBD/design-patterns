@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-b" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0d0019"/>
+      <stop offset="40%" stop-color="#1a0033"/>
+      <stop offset="100%" stop-color="#080012"/>
+    </linearGradient>
+    <radialGradient id="storm-center" cx="50%" cy="20%" r="35%">
+      <stop offset="0%" stop-color="#8800cc" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="500" fill="url(#sky-b)"/>
+  <rect width="1200" height="500" fill="url(#storm-center)"/>
+  <!-- Storm clouds -->
+  <ellipse cx="300" cy="60" rx="200" ry="50" fill="#1a0033" opacity="0.6"/>
+  <ellipse cx="600" cy="40" rx="250" ry="60" fill="#200040" opacity="0.5"/>
+  <ellipse cx="900" cy="70" rx="200" ry="45" fill="#1a0033" opacity="0.6"/>
+  <!-- Lightning bolts -->
+  <path d="M350,100 L340,150 L360,145 L345,200" fill="none" stroke="#cc44ff" stroke-width="2" opacity="0.4"/>
+  <path d="M800,80 L790,140 L810,135 L795,190" fill="none" stroke="#aa22ee" stroke-width="1.5" opacity="0.3"/>
+  <!-- Towers -->
+  <rect x="180" y="280" width="30" height="220" fill="#1a0025" opacity="0.8"/>
+  <polygon points="180,280 195,250 210,280" fill="#2d004d" opacity="0.7"/>
+  <circle cx="195" cy="260" r="3" fill="#cc44ff" opacity="0.4"/>
+  <rect x="550" y="250" width="35" height="250" fill="#1a0025" opacity="0.8"/>
+  <polygon points="550,250 567,210 585,250" fill="#2d004d" opacity="0.7"/>
+  <circle cx="567" cy="225" r="4" fill="#ff44ff" opacity="0.3"/>
+  <rect x="920" y="300" width="28" height="200" fill="#1a0025" opacity="0.8"/>
+  <polygon points="920,300 934,270 948,300" fill="#2d004d" opacity="0.7"/>
+  <circle cx="934" cy="280" r="3" fill="#cc44ff" opacity="0.4"/>
+  <!-- Energy arcs between towers -->
+  <path d="M210,300 Q380,250 550,280" fill="none" stroke="#8800cc" stroke-width="1" opacity="0.25" stroke-dasharray="8 4"/>
+  <path d="M585,270 Q750,230 920,310" fill="none" stroke="#cc44ff" stroke-width="1" opacity="0.2" stroke-dasharray="8 4"/>
+  <!-- Ground terrain -->
+  <path d="M0,450 Q150,435 300,445 Q500,430 700,445 Q900,435 1100,445 L1200,450 L1200,500 L0,500 Z" fill="#0d0019" opacity="0.8"/>
+  <!-- Purple rain -->
+  <line x1="100" y1="120" x2="95" y2="160" stroke="#8800cc" stroke-width="1" opacity="0.2"/>
+  <line x1="250" y1="100" x2="245" y2="145" stroke="#cc44ff" stroke-width="1" opacity="0.15"/>
+  <line x1="450" y1="110" x2="445" y2="155" stroke="#8800cc" stroke-width="1" opacity="0.2"/>
+  <line x1="650" y1="90" x2="645" y2="135" stroke="#cc44ff" stroke-width="1" opacity="0.15"/>
+  <line x1="850" y1="115" x2="845" y2="160" stroke="#8800cc" stroke-width="1" opacity="0.2"/>
+  <line x1="1050" y1="105" x2="1045" y2="150" stroke="#cc44ff" stroke-width="1" opacity="0.15"/>
+</svg>
