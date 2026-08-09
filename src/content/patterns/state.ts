@@ -49,6 +49,7 @@ All logic for a specific state lives in one place. Adding a new state means addi
     { term: "Concrete State", definition: "A class implementing state-specific behavior (e.g., DraftState, PublishedState)." },
     { term: "State Transition", definition: "Changing from one state to another. Can be triggered by the context or by the state itself." },
     { term: "Finite State Machine", definition: "A model where an object can be in one of a fixed set of states, with defined transitions between them." },
+    { term: "State vs Strategy", definition: "In State, states are aware of each other and trigger transitions themselves. In Strategy, algorithms are independent and stateless — the client picks which one to use." },
   ],
   highlightLines: [5, 6, 7, 18, 19, 20, 21, 22, 23],
   diagramDescription: "Context delegates to current State → DraftState, ReviewState, PublishedState each implement different behavior for the same methods → state transitions swap the active state.",

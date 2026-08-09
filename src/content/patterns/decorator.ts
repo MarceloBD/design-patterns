@@ -44,6 +44,7 @@ EmailDecorator wraps a Notifier, adds email sending, then passes to the next. Sl
     { term: "Base Decorator", definition: "An abstract class that holds a reference to the wrapped component and delegates to it." },
     { term: "Concrete Decorator", definition: "Adds specific behavior (e.g., compression, encryption, logging) before/after delegating." },
     { term: "Wrapping", definition: "Enclosing an object inside another that adds behavior. The key mechanism of the Decorator pattern." },
+    { term: "Middleware as Decorator", definition: "Express.js middleware is a real-world Decorator: each layer wraps the handler, adding logging, auth, compression, then delegates to the next. Classic stacking." },
   ],
   highlightLines: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
   diagramDescription: "DataSource interface → FileDataSource (base) → Decorator wraps DataSource → EncryptionDecorator, CompressionDecorator stack on top.",

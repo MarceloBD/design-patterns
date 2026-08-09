@@ -280,6 +280,27 @@ export function getPatternBySlug(slug: string): PatternMetadata | undefined {
   return PATTERN_METADATA.find((p) => p.slug === slug);
 }
 
+export function getNextPattern(currentSlug: string): PatternMetadata | null {
+  const current = PATTERN_METADATA.find((p) => p.slug === currentSlug);
+  if (!current) return null;
+
+  const categoryPatterns = getPatternsByCategory(current.category);
+  const currentIndex = categoryPatterns.findIndex((p) => p.slug === currentSlug);
+
+  if (currentIndex < categoryPatterns.length - 1) {
+    return categoryPatterns[currentIndex + 1];
+  }
+
+  const categories: PatternCategory[] = ["creational", "structural", "behavioral"];
+  const categoryIndex = categories.indexOf(current.category);
+  if (categoryIndex < categories.length - 1) {
+    const nextCategoryPatterns = getPatternsByCategory(categories[categoryIndex + 1]);
+    return nextCategoryPatterns[0] ?? null;
+  }
+
+  return null;
+}
+
 export function getAllCategories(): PatternCategory[] {
   return ["creational", "structural", "behavioral"];
 }

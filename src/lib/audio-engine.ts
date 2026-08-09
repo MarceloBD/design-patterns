@@ -24,10 +24,10 @@ function getContext(): AudioContext {
   if (!state.context) {
     state.context = new AudioContext();
     state.backgroundGain = state.context.createGain();
-    state.backgroundGain.gain.value = 0.08;
+    state.backgroundGain.gain.value = 0.06;
     state.backgroundGain.connect(state.context.destination);
     state.sfxGain = state.context.createGain();
-    state.sfxGain.gain.value = 0.15;
+    state.sfxGain.gain.value = 0.08;
     state.sfxGain.connect(state.context.destination);
   }
   if (state.context.state === "suspended") {
@@ -36,6 +36,9 @@ function getContext(): AudioContext {
   return state.context;
 }
 
+const FADE_IN = 0.08;
+const FADE_OUT = 0.12;
+
 function playNote(frequency: number, duration: number, type: OscillatorType, gainNode: GainNode, delay = 0): OscillatorNode {
   const context = getContext();
   const oscillator = context.createOscillator();
@@ -43,16 +46,21 @@ function playNote(frequency: number, duration: number, type: OscillatorType, gai
 
   oscillator.type = type;
   oscillator.frequency.value = frequency;
-  envelope.gain.value = 0;
-  envelope.gain.setValueAtTime(0, context.currentTime + delay);
-  envelope.gain.linearRampToValueAtTime(1, context.currentTime + delay + 0.05);
-  envelope.gain.setValueAtTime(1, context.currentTime + delay + duration - 0.05);
-  envelope.gain.linearRampToValueAtTime(0, context.currentTime + delay + duration);
+
+  const startTime = context.currentTime + delay;
+  const endTime = startTime + duration;
+  const fadeIn = Math.min(FADE_IN, duration * 0.3);
+  const fadeOut = Math.min(FADE_OUT, duration * 0.4);
+
+  envelope.gain.setValueAtTime(0, startTime);
+  envelope.gain.linearRampToValueAtTime(1, startTime + fadeIn);
+  envelope.gain.setValueAtTime(1, endTime - fadeOut);
+  envelope.gain.linearRampToValueAtTime(0, endTime);
 
   oscillator.connect(envelope);
   envelope.connect(gainNode);
-  oscillator.start(context.currentTime + delay);
-  oscillator.stop(context.currentTime + delay + duration);
+  oscillator.start(startTime);
+  oscillator.stop(endTime + 0.01);
 
   return oscillator;
 }
@@ -108,10 +116,23 @@ export function stopBackgroundMusic(): void {
     state.loopTimeout = null;
   }
 
-  state.currentOscillators.forEach((osc) => {
-    try { osc.stop(); } catch { /* already stopped */ }
-  });
-  state.currentOscillators = [];
+  if (state.backgroundGain && state.context) {
+    state.backgroundGain.gain.linearRampToValueAtTime(0, state.context.currentTime + 0.3);
+    setTimeout(() => {
+      state.currentOscillators.forEach((osc) => {
+        try { osc.stop(); } catch { /* already stopped */ }
+      });
+      state.currentOscillators = [];
+      if (state.backgroundGain) {
+        state.backgroundGain.gain.value = 0.06;
+      }
+    }, 350);
+  } else {
+    state.currentOscillators.forEach((osc) => {
+      try { osc.stop(); } catch { /* already stopped */ }
+    });
+    state.currentOscillators = [];
+  }
 }
 
 export function playSoundEffect(effect: SoundEffect): void {
@@ -124,44 +145,44 @@ export function playSoundEffect(effect: SoundEffect): void {
 
   switch (effect) {
     case "click":
-      playNote(800, 0.05, "square", sfxGain);
-      playNote(1200, 0.03, "square", sfxGain, 0.03);
+      playNote(800, 0.06, "square", sfxGain);
+      playNote(1200, 0.04, "square", sfxGain, 0.04);
       break;
     case "hit":
-      playNote(523, 0.1, "sine", sfxGain);
-      playNote(659, 0.1, "sine", sfxGain, 0.05);
-      playNote(784, 0.15, "sine", sfxGain, 0.1);
+      playNote(523, 0.12, "sine", sfxGain);
+      playNote(659, 0.12, "sine", sfxGain, 0.06);
+      playNote(784, 0.18, "sine", sfxGain, 0.12);
       break;
     case "hurt":
-      playNote(300, 0.1, "sawtooth", sfxGain);
-      playNote(200, 0.2, "sawtooth", sfxGain, 0.1);
+      playNote(300, 0.15, "sawtooth", sfxGain);
+      playNote(200, 0.25, "sawtooth", sfxGain, 0.12);
       break;
     case "gameover":
-      playNote(392, 0.3, "sawtooth", sfxGain);
-      playNote(330, 0.3, "sawtooth", sfxGain, 0.3);
-      playNote(261, 0.3, "sawtooth", sfxGain, 0.6);
-      playNote(196, 0.5, "sawtooth", sfxGain, 0.9);
+      playNote(392, 0.35, "sawtooth", sfxGain);
+      playNote(330, 0.35, "sawtooth", sfxGain, 0.35);
+      playNote(261, 0.35, "sawtooth", sfxGain, 0.7);
+      playNote(196, 0.5, "sawtooth", sfxGain, 1.05);
       break;
     case "purchase":
-      playNote(523, 0.08, "sine", sfxGain);
-      playNote(659, 0.08, "sine", sfxGain, 0.08);
-      playNote(784, 0.08, "sine", sfxGain, 0.16);
-      playNote(1047, 0.15, "sine", sfxGain, 0.24);
-      break;
-    case "coin":
-      playNote(988, 0.06, "square", sfxGain);
-      playNote(1318, 0.1, "square", sfxGain, 0.06);
-      break;
-    case "levelup":
       playNote(523, 0.1, "sine", sfxGain);
       playNote(659, 0.1, "sine", sfxGain, 0.1);
       playNote(784, 0.1, "sine", sfxGain, 0.2);
-      playNote(1047, 0.3, "sine", sfxGain, 0.3);
+      playNote(1047, 0.18, "sine", sfxGain, 0.3);
+      break;
+    case "coin":
+      playNote(988, 0.08, "square", sfxGain);
+      playNote(1318, 0.12, "square", sfxGain, 0.08);
+      break;
+    case "levelup":
+      playNote(523, 0.12, "sine", sfxGain);
+      playNote(659, 0.12, "sine", sfxGain, 0.12);
+      playNote(784, 0.12, "sine", sfxGain, 0.24);
+      playNote(1047, 0.35, "sine", sfxGain, 0.36);
       break;
     case "lightning":
-      playNote(80, 0.3, "sawtooth", sfxGain);
-      playNote(60, 0.1, "sawtooth", sfxGain, 0.05);
-      playNote(100, 0.2, "sawtooth", sfxGain, 0.15);
+      playNote(80, 0.35, "sawtooth", sfxGain);
+      playNote(60, 0.15, "sawtooth", sfxGain, 0.08);
+      playNote(100, 0.25, "sawtooth", sfxGain, 0.2);
       break;
   }
 }

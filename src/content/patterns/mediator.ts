@@ -40,6 +40,7 @@ Adding or changing interactions means editing only the mediator, not every compo
     { term: "Colleague/Component", definition: "Objects that interact through the mediator instead of directly. They hold a reference to the mediator." },
     { term: "Event-Driven", definition: "Components emit events to the mediator, which routes them to interested parties. A common implementation approach." },
     { term: "Single Responsibility", definition: "Without a mediator, interaction logic is scattered across components. The mediator centralizes it." },
+    { term: "Mediator vs Facade", definition: "Mediator enables two-way communication between peers. Facade is one-directional: it simplifies access to a subsystem but subsystem components don't talk back through it." },
   ],
   highlightLines: [12, 13, 14, 15, 16, 17, 18, 19],
   diagramDescription: "Components → notify Mediator → Mediator coordinates response → updates other Components. No direct component-to-component links.",

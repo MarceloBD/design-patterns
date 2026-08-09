@@ -10,6 +10,7 @@ import { TrophyIcon, SparklesIcon } from "@/components/icons";
 import { DeathScreen } from "@/components/interactive/DeathScreen";
 import { VictoryScreen } from "@/components/interactive/VictoryScreen";
 import { SHOP_ITEMS } from "@/data/shop-items";
+import { getNextPattern } from "@/data/patterns";
 import { useSound } from "@/hooks/useSound";
 
 const SECONDS_PER_QUESTION = 30;
@@ -109,8 +110,11 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
     }
   }, [timeRemaining, isSubmitted, hasStarted]);
 
-  const handleFinalSubmit = () => {
+  const handleFinalSubmit = (forceFail = false) => {
     const quizResult = submitQuiz();
+    if (forceFail) {
+      quizResult.passed = false;
+    }
     const earned = handleQuizComplete(quizResult);
     setRewards(earned);
     stopMusic();
@@ -135,6 +139,15 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
       setBossHp((previous) => Math.max(0, previous - 1));
       setBossHit(true);
       setTimeout(() => setBossHit(false), 400);
+
+      setTimeout(() => {
+        setFeedback("idle");
+        if (isLastQuestion) {
+          handleFinalSubmit();
+        } else {
+          goToNext();
+        }
+      }, ANSWER_FEEDBACK_DELAY);
     } else {
       setFeedback("wrong");
       play("hurt");
@@ -142,21 +155,22 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
         const newHearts = previous - 1;
         if (newHearts <= 0) {
           setTimeout(() => {
-            handleFinalSubmit();
+            setFeedback("idle");
+            handleFinalSubmit(true);
+          }, ANSWER_FEEDBACK_DELAY);
+        } else {
+          setTimeout(() => {
+            setFeedback("idle");
+            if (isLastQuestion) {
+              handleFinalSubmit();
+            } else {
+              goToNext();
+            }
           }, ANSWER_FEEDBACK_DELAY);
         }
         return newHearts;
       });
     }
-
-    setTimeout(() => {
-      setFeedback("idle");
-      if (isLastQuestion) {
-        handleFinalSubmit();
-      } else {
-        goToNext();
-      }
-    }, ANSWER_FEEDBACK_DELAY);
   }, [feedback, currentQuestion, isLastQuestion, selectAnswer, goToNext]);
 
   const handleRetry = () => {
@@ -218,6 +232,7 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
           badgesEarned={rewards?.badgesEarned ?? []}
           leveledUp={rewards?.leveledUp ?? false}
           timeSpent={result.timeSpent}
+          nextPatternSlug={getNextPattern(quiz.patternSlug)?.slug ?? null}
         />
       );
     }

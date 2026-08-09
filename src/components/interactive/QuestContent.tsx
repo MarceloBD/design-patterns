@@ -4,11 +4,17 @@ import { useEffect, useState } from "react";
 import { PatternContent } from "@/types/pattern";
 import { PatternQuiz } from "@/types/quiz";
 import { useGameStore } from "@/hooks/useGameStore";
+import { useSpeech } from "@/hooks/useSpeech";
 import { GlossaryBox } from "@/components/GlossaryBox";
 import { CodeBlock } from "@/components/CodeBlock";
 import { Quiz } from "@/components/interactive/Quiz";
+import { SpeechButton } from "@/components/interactive/SpeechButton";
+import { HighlightedText } from "@/components/interactive/HighlightedText";
+import { SpeechSpeedConfig } from "@/components/interactive/SpeechSpeedConfig";
 import { AlertIcon, LightbulbIcon, CodeIcon, TargetIcon, CheckIcon, SkullIcon } from "@/components/icons";
 import { HiddenCoin } from "@/components/interactive/HiddenCoin";
+import { PatternComparisonCard } from "@/components/interactive/PatternComparisonCard";
+import { getComparisonsForPattern } from "@/data/pattern-comparisons";
 
 interface QuestContentProps {
   content: PatternContent;
@@ -26,6 +32,7 @@ const QUEST_PHASES = [
 
 export function QuestContent({ content, quiz }: QuestContentProps) {
   const { handleReadPattern, player, isHydrated } = useGameStore();
+  const { speak, isSpeaking, currentWordIndex, activeSection, speed, setSpeed } = useSpeech();
   const [visiblePhases, setVisiblePhases] = useState<Set<string>>(new Set(["hook"]));
   const [showObjectives, setShowObjectives] = useState(false);
 
@@ -105,6 +112,11 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
         </div>
       </div>
 
+      {/* Speech speed configuration */}
+      <div className="mb-6 flex justify-end">
+        <SpeechSpeedConfig speed={speed} onSpeedChange={setSpeed} />
+      </div>
+
       {/* Phase 1: Quest Hook - styled as a received message/scroll */}
       <section className="mb-12" data-phase="hook">
         <PhaseMarker number={1} label="Quest Brief" color="var(--accent-teal)" />
@@ -113,18 +125,28 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
             <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[var(--accent-teal)] opacity-[0.03]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(122,138,255,0.02),transparent_50%)]" />
             <div className="relative p-7">
-              <p className="text-[20px] font-extrabold italic tracking-tight text-[var(--text-primary)] leading-[1.6] font-[var(--font-display)]">
-                &ldquo;{content.hook}&rdquo;
-              </p>
+              <div className="flex items-start justify-between gap-2">
+                <p className="text-[20px] font-extrabold italic tracking-tight text-[var(--text-primary)] leading-[1.6] font-[var(--font-display)]">
+                  &ldquo;<HighlightedText text={content.hook} currentWordIndex={currentWordIndex} isActive={activeSection === "hook"} />&rdquo;
+                </p>
+                <SpeechButton onClick={() => speak(content.hook, "hook")} isActive={isSpeaking && activeSection === "hook"} />
+              </div>
             </div>
           </div>
         </div>
 
         <div className="mt-4 ml-1 pl-4 border-l-2 border-[var(--accent-pink)]/25 py-1 relative">
-          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-[var(--accent-pink)]/80 mb-1.5 block">
-            Think of it like...
-          </span>
-          <p className="text-[13px] leading-[1.9] text-[var(--text-muted)] italic">{content.analogy}</p>
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-[var(--accent-pink)]/80 mb-1.5 block">
+                Think of it like...
+              </span>
+              <p className="text-[13px] leading-[1.9] text-[var(--text-muted)] italic">
+                <HighlightedText text={content.analogy} currentWordIndex={currentWordIndex} isActive={activeSection === "analogy"} />
+              </p>
+            </div>
+            <SpeechButton onClick={() => speak(content.analogy, "analogy")} isActive={isSpeaking && activeSection === "analogy"} />
+          </div>
           <HiddenCoin coinId={`${content.slug}-hook`} position="right" />
         </div>
       </section>
@@ -157,13 +179,18 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
           <div className="rounded-[11px] bg-[var(--surface-raised)] overflow-hidden relative">
             <div className="absolute -left-12 -top-12 h-36 w-36 rounded-full bg-[var(--accent-pink)] opacity-[0.025]" />
             <div className="relative p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <AlertIcon className="text-[var(--accent-pink)]" size={14} />
-                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--accent-pink)]">
-                  Without this pattern...
-                </span>
+              <div className="flex items-center justify-between gap-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <AlertIcon className="text-[var(--accent-pink)]" size={14} />
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--accent-pink)]">
+                    Without this pattern...
+                  </span>
+                </div>
+                <SpeechButton onClick={() => speak(content.problem, "problem")} isActive={isSpeaking && activeSection === "problem"} />
               </div>
-              <p className="text-[14px] leading-[2.1] text-[var(--text-muted)] whitespace-pre-line">{content.problem}</p>
+              <p className="text-[14px] leading-[2.1] text-[var(--text-muted)] whitespace-pre-line">
+                <HighlightedText text={content.problem} currentWordIndex={currentWordIndex} isActive={activeSection === "problem"} />
+              </p>
             </div>
           </div>
         </div>
@@ -176,13 +203,18 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
           <div className="rounded-[11px] bg-[var(--surface-raised)] overflow-hidden relative">
             <div className="absolute -right-14 -bottom-14 h-40 w-40 rounded-full bg-[var(--accent-teal)] opacity-[0.025]" />
             <div className="relative p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <LightbulbIcon className="text-[var(--accent-teal)]" size={14} />
-                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--accent-teal)]">
-                  The pattern reveals...
-                </span>
+              <div className="flex items-center justify-between gap-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <LightbulbIcon className="text-[var(--accent-teal)]" size={14} />
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--accent-teal)]">
+                    The pattern reveals...
+                  </span>
+                </div>
+                <SpeechButton onClick={() => speak(content.solution, "solution")} isActive={isSpeaking && activeSection === "solution"} />
               </div>
-              <p className="text-[14px] leading-[2.1] text-[var(--text-muted)] whitespace-pre-line">{content.solution}</p>
+              <p className="text-[14px] leading-[2.1] text-[var(--text-muted)] whitespace-pre-line">
+                <HighlightedText text={content.solution} currentWordIndex={currentWordIndex} isActive={activeSection === "solution"} />
+              </p>
             </div>
           </div>
         </div>
@@ -192,6 +224,29 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
           <HiddenCoin coinId={`${content.slug}-solution`} position="left" />
         </div>
       </section>
+
+      {/* Similar Patterns Comparison */}
+      {getComparisonsForPattern(content.slug).length > 0 && (
+        <section className="mb-12">
+          <div className="flex items-center gap-2 mb-4">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-[var(--accent-blue)]" strokeWidth="2">
+              <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
+            </svg>
+            <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--accent-blue)]">
+              Know Your Allies
+            </span>
+          </div>
+          <div className="space-y-4">
+            {getComparisonsForPattern(content.slug).map((comparison) => (
+              <PatternComparisonCard
+                key={`${comparison.patternA}-${comparison.patternB}`}
+                comparison={comparison}
+                currentSlug={content.slug}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Phase 5: Implementation - spell scroll */}
       <section className="mb-12" data-phase="code">

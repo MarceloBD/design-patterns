@@ -44,6 +44,7 @@ The context class holds a strategy reference and delegates calculations to it. S
     { term: "Context", definition: "Uses a strategy via the interface. Doesn't know which concrete strategy it's using." },
     { term: "Runtime Swapping", definition: "Changing the active strategy while the program runs, based on conditions or user choice." },
     { term: "Open/Closed Principle", definition: "Code is open for extension (add new strategies) but closed for modification (existing code unchanged)." },
+    { term: "Strategy in Functional Programming", definition: "In FP, passing a callback function as a parameter achieves the same effect as Strategy. The function IS the strategy — same concept, less ceremony." },
   ],
   highlightLines: [1, 2, 3, 10, 11, 12, 13, 14],
   diagramDescription: "Context holds a Strategy reference → calls strategy.execute() → ConcreteStrategyA/B/C each implement different algorithms → swap at runtime.",

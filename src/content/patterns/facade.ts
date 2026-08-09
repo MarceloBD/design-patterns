@@ -49,6 +49,7 @@ Client code goes from 50 lines of orchestration to one line: facade.upload(file)
     { term: "Simplified Interface", definition: "A small set of methods covering the most common use cases, hiding the full complexity." },
     { term: "Orchestration", definition: "Coordinating multiple operations across different services in the correct order." },
     { term: "Decoupling", definition: "Reducing dependencies between client code and subsystem internals by going through the Facade." },
+    { term: "Facade vs Adapter", definition: "Facade simplifies a complex subsystem into convenient methods. Adapter makes two incompatible interfaces work together. Facade = simplification; Adapter = translation." },
   ],
   highlightLines: [30, 31, 32, 33, 34, 35, 36, 37, 38],
   diagramDescription: "Client → Facade (simple methods) → internally coordinates SubsystemA, SubsystemB, SubsystemC.",

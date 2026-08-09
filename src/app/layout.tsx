@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "Design Patterns Quest - Learn 22 Patterns",
   description:
     "A gamified RPG experience to master all 22 GoF design patterns with interactive quizzes, XP, skill trees, and real TypeScript examples.",
+  icons: {
+    icon: "/icon.svg",
+  },
   metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/",

@@ -38,6 +38,7 @@ The Shape holds a reference to a Renderer and delegates the platform-specific wo
     { term: "Refined Abstraction", definition: "A subclass of the abstraction that adds specific behavior (e.g., Circle extends Shape)." },
     { term: "Concrete Implementation", definition: "A specific implementation variant (e.g., SVGRenderer, CanvasRenderer)." },
     { term: "Composition over Inheritance", definition: "Using object references (has-a) instead of class hierarchies (is-a) to combine behaviors." },
+    { term: "Bridge vs Adapter", definition: "Both involve wrapping, but Adapter fixes incompatibility between existing interfaces. Bridge is designed up front to prevent future coupling between two independent dimensions." },
   ],
   highlightLines: [15, 16, 17, 18, 19, 20, 30, 31, 32, 33],
   diagramDescription: "Shape (abstraction) holds a reference to Renderer (implementation) → Circle/Square extend Shape → SVGRenderer/CanvasRenderer implement Renderer → mix and match freely.",

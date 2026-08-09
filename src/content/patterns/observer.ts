@@ -43,6 +43,7 @@ Observers can be added or removed at runtime. The subject doesn't need to know w
     { term: "Subscription", definition: "The act of registering an observer with a subject. Usually via subscribe()/unsubscribe() methods." },
     { term: "Event", definition: "The trigger for notification. Can be a state change, action, or any defined occurrence." },
     { term: "Push vs Pull", definition: "Push: subject sends data with notification. Pull: observer queries the subject after being notified." },
+    { term: "Observer in JavaScript", definition: "DOM event listeners (addEventListener) are Observers. The element is the subject, your callback is the observer. removeEventListener unsubscribes." },
   ],
   highlightLines: [5, 6, 7, 8, 9, 15, 16, 17, 18],
   diagramDescription: "Subject maintains observer list → on state change, calls notify() → each Observer's update() is called with new data.",

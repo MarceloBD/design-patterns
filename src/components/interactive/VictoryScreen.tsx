@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { PatternCategory } from "@/types/pattern";
 import { TrophyIcon, SparklesIcon } from "@/components/icons";
 
@@ -13,6 +14,7 @@ interface VictoryScreenProps {
   badgesEarned: string[];
   leveledUp: boolean;
   timeSpent: number;
+  nextPatternSlug: string | null;
 }
 
 const DEFEATED_BOSS: Record<PatternCategory, { svg: React.ReactNode; name: string }> = {
@@ -58,7 +60,7 @@ const DEFEATED_BOSS: Record<PatternCategory, { svg: React.ReactNode; name: strin
   },
 };
 
-export function VictoryScreen({ category, score, totalQuestions, percentage, xpEarned, badgesEarned, leveledUp, timeSpent }: VictoryScreenProps) {
+export function VictoryScreen({ category, score, totalQuestions, percentage, xpEarned, badgesEarned, leveledUp, timeSpent, nextPatternSlug }: VictoryScreenProps) {
   const [phase, setPhase] = useState<"flash" | "boss" | "text" | "rewards" | "complete">("flash");
 
   useEffect(() => {
@@ -173,6 +175,15 @@ export function VictoryScreen({ category, score, totalQuestions, percentage, xpE
           )}
 
           <p className="text-[9px] text-[var(--text-faint)] mt-3">Completed in {timeSpent}s</p>
+
+          {nextPatternSlug && (
+            <Link
+              href={`/quest/${nextPatternSlug}`}
+              className="inline-block mt-5 px-6 py-2.5 rounded-lg bg-[var(--accent-green)]/15 border border-[var(--accent-green)]/40 text-[var(--accent-green)] text-[12px] font-semibold uppercase tracking-wider hover:bg-[var(--accent-green)]/25 transition-all"
+            >
+              Next Challenge &rarr;
+            </Link>
+          )}
         </div>
       )}
     </div>

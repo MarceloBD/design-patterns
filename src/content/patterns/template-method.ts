@@ -48,6 +48,7 @@ Common logic lives in one place. Subclasses can't accidentally break the algorit
     { term: "Hook Methods", definition: "Optional steps with default (often empty) implementation. Subclasses CAN override them but don't have to." },
     { term: "Inversion of Control", definition: "The base class calls subclass methods (not the other way around). The framework/base controls the flow." },
     { term: "Hollywood Principle", definition: "'Don't call us, we'll call you.' The base class decides when to call subclass steps." },
+    { term: "Template Method vs Strategy", definition: "Template Method uses inheritance (subclasses override steps). Strategy uses composition (inject different algorithm objects). Both vary behavior, but through different mechanisms." },
   ],
   highlightLines: [6, 7, 8, 9, 10, 11, 12, 13],
   diagramDescription: "AbstractClass defines templateMethod() calling step1(), step2(), step3() → ConcreteClasses override specific steps → the order/skeleton is fixed by the base.",

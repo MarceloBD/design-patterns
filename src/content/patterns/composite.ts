@@ -47,6 +47,7 @@ Client code just calls getPrice() on anything and gets the right answer. No type
     { term: "Composite", definition: "An element that has children. Delegates operations to its children and combines results." },
     { term: "Tree Structure", definition: "A hierarchy where composites contain leaves and other composites, forming branches and sub-branches." },
     { term: "Uniform Treatment", definition: "Clients interact with leaves and composites through the same interface, without caring which one they have." },
+    { term: "Type Safety Trade-off", definition: "The shared interface makes it harder to restrict which components can be children. You lose compile-time guarantees about valid tree structures." },
   ],
   highlightLines: [1, 2, 3, 10, 11, 12, 19, 20, 21, 22, 23],
   diagramDescription: "Component interface (getPrice) → Leaf (Product) returns its price → Composite (Bundle) iterates children and sums their getPrice() results.",

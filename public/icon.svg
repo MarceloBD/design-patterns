@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Shield body -->
+  <path d="M16 2 L28 7 L28 14 C28 22 22 28 16 30 C10 28 4 22 4 14 L4 7 Z" fill="#1a1d2e" stroke="#5eead4" stroke-width="1.5"/>
+  <!-- Inner shield glow -->
+  <path d="M16 5 L25 9 L25 14 C25 20 20 25 16 27 C12 25 7 20 7 14 L7 9 Z" fill="#0f1219" stroke="#5eead4" stroke-width="0.5" opacity="0.5"/>
+  <!-- Code brackets < / > -->
+  <text x="16" y="20" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#5eead4">&lt;/&gt;</text>
+  <!-- Gem at top -->
+  <path d="M16 6 L18 8 L16 10 L14 8 Z" fill="#a78bfa" opacity="0.9"/>
+</svg>

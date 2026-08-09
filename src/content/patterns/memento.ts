@@ -46,6 +46,7 @@ Encapsulation is preserved: state saving happens inside the object that owns the
     { term: "Caretaker", definition: "Manages memento history (save/undo/redo). Doesn't modify mementos — just stores and retrieves them." },
     { term: "Encapsulation", definition: "Keeping internal state hidden from outside. Memento preserves this: only the originator reads its own snapshots." },
     { term: "Snapshot", definition: "A frozen copy of an object's state at a specific moment in time." },
+    { term: "Memento + Command", definition: "Often used together: Command performs the operation, Memento saves state before each command. Undo = restore the memento saved before the last command." },
   ],
   highlightLines: [15, 16, 17, 18, 19, 20, 35, 36, 37],
   diagramDescription: "Originator → creates Memento (snapshot of state) → Caretaker stores it in history → on undo, Caretaker gives Memento back to Originator → state is restored.",

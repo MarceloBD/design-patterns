@@ -46,6 +46,7 @@ Types: Virtual Proxy (lazy init), Protection Proxy (access control), Caching Pro
     { term: "Proxy", definition: "The substitute that controls access to the real subject. Same interface, extra behavior." },
     { term: "Lazy Initialization", definition: "Virtual Proxy delays creating the expensive object until it's actually needed." },
     { term: "Access Control", definition: "Protection Proxy checks permissions before allowing operations on the real subject." },
+    { term: "Proxy vs Decorator", definition: "Proxy controls access and lifecycle (lazy init, auth, caching). Decorator adds new behavior/features. Both wrap objects with the same interface, but their intent differs." },
   ],
   highlightLines: [18, 19, 20, 21, 22, 23, 24, 25, 26, 27],
   diagramDescription: "Client → Proxy (same interface) → checks/logs/caches → delegates to RealSubject.",
