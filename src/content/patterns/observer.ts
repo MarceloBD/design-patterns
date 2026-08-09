@@ -7,6 +7,7 @@ export const observerContent: PatternContent = {
   difficulty: "beginner",
   order: 6,
   xpReward: 150,
+  lore: "The Watchtowers of the Nexus once broadcast events across the land. When a king spoke, every subscribed tower relayed the message simultaneously. Now the towers broadcast to ghosts — subscribers that unregistered but were never removed. Learn the discipline of publish and subscribe.",
   hook: "Notify multiple objects about changes in another object",
   analogy: "A YouTube subscription. When a channel (subject) publishes a new video, all subscribers (observers) get notified automatically. You don't check the channel manually every hour — the notification system handles it. Subscribers can join or leave anytime without affecting the channel or other subscribers.",
   antiPattern: `// The naive approach: the subject directly calls every dependent

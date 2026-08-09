@@ -7,6 +7,7 @@ export const flyweightContent: PatternContent = {
   difficulty: "advanced",
   order: 6,
   xpReward: 150,
+  lore: "The Crystal Plains hold ten thousand identical soldiers — but each one unique in position and mission. Memory once nearly consumed the Citadel trying to store them all separately. An ancient optimization shares what is common, keeps only what is unique. Find it.",
   hook: "Share common state between multiple objects to save memory",
   analogy: "Characters in a text editor. The letter 'e' appears thousands of times in a document. Instead of storing font, size, and glyph data separately for each 'e', the editor stores that shared data once and reuses it. Each character instance only stores what's unique to it (position in the document).",
   antiPattern: `// The naive approach: each particle stores ALL its data independently

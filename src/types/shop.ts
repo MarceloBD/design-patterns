@@ -6,6 +6,7 @@ export interface ShopItem {
   id: string;
   name: string;
   description: string;
+  lore: string;
   category: ItemCategory;
   price: number;
   effect: string;

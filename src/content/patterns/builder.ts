@@ -7,6 +7,7 @@ export const builderContent: PatternContent = {
   difficulty: "beginner",
   order: 3,
   xpReward: 150,
+  lore: "The Master Mason's Workshop stands in the deepest caldera. Here, complex objects were assembled piece by piece — no telescoping incantations, no 12-parameter summonings. The mason is gone, but his blueprints remain on the walls. Learn his step-by-step discipline.",
   hook: "Construct complex objects step by step",
   analogy: "Think of ordering a custom burger. You don't get a pre-made one — you pick the bun, patty, toppings, and sauce step by step. The cashier (director) might suggest a combo, but you can also build your own. The Builder is the kitchen that assembles each piece in sequence and hands you the finished product.",
   antiPattern: `// The naive approach: telescoping constructor with 10+ parameters

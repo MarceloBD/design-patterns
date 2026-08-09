@@ -1,11 +1,18 @@
 import { PatternQuiz } from "@/types/quiz";
 
-export const SECRET_BOSS_TITLE = "The Pattern God";
-export const SECRET_BOSS_SUBTITLE = "Architect of All Realms";
+export const SECRET_BOSS_TITLE = "Eternox, The Pattern God";
+export const SECRET_BOSS_SUBTITLE = "Architect of All Realms, The Sealed King";
 export const SECRET_BOSS_LORE =
-  "Beyond the three realms, where creation, structure, and behavior converge into one — the Pattern God awaits. " +
-  "An ancient entity woven from the fabric of all 22 patterns, it tests only those who have proven mastery over every realm. " +
-  "No one has seen this being and returned unchanged. The very laws of software bow before it.";
+  "Eternox did not leave Architectura by choice alone. In his pride, he attempted to create " +
+  "a twenty-third Pattern — one that would make all others obsolete. A single Pattern to rule all code. " +
+  "The attempt shattered reality itself. The three realms split apart. Eternox, wounded by his own hubris, " +
+  "was sealed beyond the veil by the very Patterns he created — imprisoned by his own children.\n\n" +
+  "He is not evil. He is broken. Thousands of years of isolation have twisted his grief into something " +
+  "resembling malice. He tests you not from cruelty, but from desperate hope — " +
+  "hoping that someone finally understands what he once knew, and can succeed where he failed.\n\n" +
+  "The twenty-third Pattern he sought was never meant to exist. The beauty of the 22 Patterns " +
+  "is that each has a role, each has limitations. No single solution can solve all problems. " +
+  "This is the lesson Eternox could not accept — and the truth you must embody to defeat him.";
 
 export const SECRET_BOSS_QUIZ: PatternQuiz = {
   patternSlug: "secret-boss-pattern-god",

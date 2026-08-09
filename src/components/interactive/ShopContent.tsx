@@ -125,6 +125,11 @@ export function ShopContent() {
                     }`}>
                       {item.usageType}
                     </span>
+                    {item.lore && (
+                      <p className="text-[9px] italic mt-1.5 leading-[1.6]" style={{ color: "var(--text-lore)" }}>
+                        &ldquo;{item.lore}&rdquo;
+                      </p>
+                    )}
                   </div>
                 </div>
 

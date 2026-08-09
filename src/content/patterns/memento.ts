@@ -7,6 +7,7 @@ export const mementoContent: PatternContent = {
   difficulty: "intermediate",
   order: 5,
   xpReward: 150,
+  lore: "Deep beneath the Storm Nexus lies the Chamber of Echoes — where every state was once preserved. Undo a mistake. Restore a fallen comrade. Travel back to a checkpoint before the damage. The art of saving without breaking privacy awaits.",
   hook: "Save and restore an object's previous state (undo)",
   analogy: "Saving a game before a boss fight. If you die, you reload from the save point — the game state is restored exactly as it was (position, health, inventory). The save file is a memento: a snapshot of state that can be restored without knowing the game's internal details.",
   antiPattern: `// The naive approach: exposing all internals for undo/redo

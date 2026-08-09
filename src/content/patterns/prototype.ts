@@ -7,6 +7,7 @@ export const prototypeContent: PatternContent = {
   difficulty: "intermediate",
   order: 4,
   xpReward: 150,
+  lore: "In the Cloning Caves, perfect duplicates once emerged from shimmering pools. Objects copied themselves — their private thoughts, their hidden strengths — without outside hands touching them. The pools have gone murky. Only shallow copies emerge. Restore the deep-clone ritual.",
   hook: "Clone existing objects without coupling to their classes",
   analogy: "Cell division in biology. When a cell needs a copy of itself, it doesn't go back to the DNA blueprint and rebuild from scratch — it clones itself directly. The clone is independent: changes to the clone don't affect the original. The Prototype pattern works the same way for objects.",
   antiPattern: `// The naive approach: manual field-by-field copying

@@ -117,6 +117,26 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
         <SpeechSpeedConfig speed={speed} onSpeedChange={setSpeed} />
       </div>
 
+      {/* Lore Prologue */}
+      {content.lore && (
+        <section className="mb-10">
+          <div className="rounded-xl border p-6 relative overflow-hidden" style={{ borderColor: "var(--border-lore)", background: "var(--surface-lore)" }}>
+            <div className="absolute top-0 left-0 w-1 h-full" style={{ background: "linear-gradient(to bottom, var(--text-lore-accent), transparent)" }} />
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <span className="text-[8px] font-semibold uppercase tracking-[0.3em] block mb-2" style={{ color: "var(--text-lore-accent)" }}>
+                  Quest Lore
+                </span>
+                <p className="text-[13px] leading-[2] italic" style={{ color: "var(--text-lore)" }}>
+                  <HighlightedText text={content.lore} currentWordIndex={currentWordIndex} isActive={activeSection === "lore"} />
+                </p>
+              </div>
+              <SpeechButton onClick={() => speak(content.lore, "lore")} isActive={isSpeaking && activeSection === "lore"} isPaused={isPaused && activeSection === "lore"} />
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Phase 1: Quest Hook - styled as a received message/scroll */}
       <section className="mb-12" data-phase="hook">
         <PhaseMarker number={1} label="Quest Brief" color="var(--accent-teal)" />

@@ -7,6 +7,7 @@ export const decoratorContent: PatternContent = {
   difficulty: "intermediate",
   order: 4,
   xpReward: 150,
+  lore: "The Wrapping Chamber lies behind the Citadel's seventh gate. Here, objects once gained new powers without surgery — layers of enchantment stacked at will, removed when no longer needed. Inheritance tried to replace this art, but it was too rigid. Rediscover the flexible path.",
   hook: "Attach new behaviors to objects by wrapping them",
   analogy: "Wearing layers of clothing. You start with a t-shirt (base object). Add a hoodie (decorator 1) for warmth. Add a rain jacket (decorator 2) for waterproofing. Each layer adds functionality without modifying the layers beneath. You can mix and match layers in any combination.",
   antiPattern: `// The naive approach: subclass explosion for every feature combination

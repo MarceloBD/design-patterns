@@ -18,6 +18,14 @@ export function useSpeech() {
   const [currentWordIndex, setCurrentWordIndex] = useState(-1);
   const [speed, setSpeedState] = useState(getStoredSpeed);
   const intentionalStopRef = useRef(false);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const activeSectionRef = useRef<string | null>(null);
+  const isSpeakingRef = useRef(false);
+  const isPausedRef = useRef(false);
+
+  activeSectionRef.current = activeSection;
+  isSpeakingRef.current = isSpeaking;
+  isPausedRef.current = isPaused;
 
   useEffect(() => {
     return () => {
@@ -36,19 +44,20 @@ export function useSpeech() {
     setCurrentWord(null);
     setCurrentWordIndex(-1);
     setActiveSection(null);
+    utteranceRef.current = null;
   }, []);
 
   const speak = useCallback((text: string, sectionId: string) => {
     if (!window.speechSynthesis) return;
 
-    if (activeSection === sectionId) {
-      if (isPaused) {
+    if (activeSectionRef.current === sectionId) {
+      if (isPausedRef.current) {
         window.speechSynthesis.resume();
         setIsPaused(false);
         setIsSpeaking(true);
         return;
       }
-      if (isSpeaking) {
+      if (isSpeakingRef.current) {
         window.speechSynthesis.pause();
         setIsPaused(true);
         setIsSpeaking(false);
@@ -58,12 +67,17 @@ export function useSpeech() {
 
     intentionalStopRef.current = true;
     window.speechSynthesis.cancel();
-    intentionalStopRef.current = false;
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = getStoredSpeed();
     utterance.pitch = 1;
     utterance.lang = "en-US";
+
+    const voices = window.speechSynthesis.getVoices();
+    const englishVoice = voices.find((voice) => voice.lang.startsWith("en") && voice.localService);
+    if (englishVoice) {
+      utterance.voice = englishVoice;
+    }
 
     utterance.onboundary = (event) => {
       if (event.name === "word") {
@@ -80,19 +94,24 @@ export function useSpeech() {
       }
     };
 
-    utterance.onerror = () => {
-      if (!intentionalStopRef.current) {
+    utterance.onerror = (event) => {
+      if (!intentionalStopRef.current && event.error !== "interrupted") {
         clearState();
       }
     };
 
+    utteranceRef.current = utterance;
     setActiveSection(sectionId);
     setIsSpeaking(true);
     setIsPaused(false);
     setCurrentWordIndex(-1);
     setCurrentWord(null);
-    window.speechSynthesis.speak(utterance);
-  }, [isSpeaking, isPaused, activeSection, clearState]);
+
+    setTimeout(() => {
+      intentionalStopRef.current = false;
+      window.speechSynthesis.speak(utterance);
+    }, 50);
+  }, [clearState]);
 
   const stop = useCallback(() => {
     intentionalStopRef.current = true;

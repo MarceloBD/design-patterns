@@ -7,6 +7,7 @@ export const singletonContent: PatternContent = {
   difficulty: "beginner",
   order: 5,
   xpReward: 150,
+  lore: "At the heart of the volcano sits the Eternal Flame — a resource that must exist exactly once. Multiple flames once threatened to melt the realm. A seal was placed: one instance, one access point. But the seal has drawbacks. Learn its power AND its cost.",
   hook: "Ensure a class has only one instance with a global access point",
   analogy: "A country has one government. No matter who asks 'who is in charge?', they always get the same answer — there's only one active instance. You can't create a second government without a revolution (or resetting the app). The Singleton is that single authoritative instance everyone references.",
   antiPattern: `// The naive approach: uncontrolled global state

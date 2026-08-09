@@ -7,6 +7,7 @@ export const visitorContent: PatternContent = {
   difficulty: "advanced",
   order: 10,
   xpReward: 150,
+  lore: "The Census Takers visit every citizen in the realm — counting, taxing, healing — without the citizens ever changing their nature. A new operation simply means a new visitor. The citizens say 'accept' and the visitor does the rest. Ancient double-dispatch magic.",
   hook: "Separate algorithms from the objects they operate on",
   analogy: "A tax auditor visiting different businesses. Each business type (restaurant, tech company, retail store) has different tax rules. The auditor (visitor) knows how to calculate taxes for each type. Businesses don't need to know tax law — they just 'accept' the auditor and let them do their job.",
   antiPattern: `// The naive approach: adding methods to every class for every new operation

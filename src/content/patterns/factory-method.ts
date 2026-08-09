@@ -7,6 +7,7 @@ export const factoryMethodContent: PatternContent = {
   difficulty: "beginner",
   order: 1,
   xpReward: 150,
+  lore: "The first forge in the Realm of Origins has gone cold. Its last smith tried to create every object by hand — hammering each one individually, never trusting apprentices with the work. When he fell, everything stopped. Your task: relight the forge and teach it to delegate creation to those who know best.",
   hook: "Let subclasses decide which object to create",
   analogy: "Think of a restaurant franchise. The headquarters defines the process for making a meal (take order, cook, serve), but each location decides what specific dishes to offer. A Tokyo branch creates sushi, a Rome branch creates pasta — same process, different products.",
   antiPattern: `// The naive approach: hardcoded object creation everywhere

@@ -7,6 +7,7 @@ export const adapterContent: PatternContent = {
   difficulty: "beginner",
   order: 1,
   xpReward: 150,
+  lore: "The first bridge into the Crystal Citadel has collapsed. On one side: your realm's interface. On the other: the Citadel's ancient protocols, completely incompatible. You must craft a translator — an adapter that speaks both languages without changing either side.",
   hook: "Make incompatible interfaces work together",
   analogy: "A power plug adapter when traveling. Your laptop has a US plug, but the outlet in Europe is different. The adapter sits between them — it doesn't change your laptop or the wall socket, it just translates one shape into another so they can work together.",
   antiPattern: `// The naive approach: modifying client code everywhere to handle multiple formats

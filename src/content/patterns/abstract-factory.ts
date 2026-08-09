@@ -7,6 +7,7 @@ export const abstractFactoryContent: PatternContent = {
   difficulty: "intermediate",
   order: 2,
   xpReward: 150,
+  lore: "Beyond the first forge lies the Hall of Families — a grand chamber where matching sets of objects were once born together. Dark buttons with dark inputs. Light themes with light icons. Now the hall produces mismatched abominations. Restore the ancient contracts that ensure families stay consistent.",
   hook: "Create families of related objects without specifying their concrete classes",
   analogy: "Imagine an IKEA store with different style collections — Modern, Victorian, Minimalist. When you pick a collection, you get a matching chair, table, and sofa that all belong together. You don't mix Victorian chairs with Modern tables. The Abstract Factory is the showroom catalog that gives you a complete, consistent family of furniture.",
   antiPattern: `// The naive approach: creating components without consistency guarantees

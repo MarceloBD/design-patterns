@@ -7,6 +7,7 @@ export const strategyContent: PatternContent = {
   difficulty: "beginner",
   order: 8,
   xpReward: 150,
+  lore: "The Nexus War Room keeps a shelf of sealed scrolls — each containing a different battle plan. Quick sort for speed. Merge sort for stability. Bubble sort for... well, learning. The commander chooses a scroll at will, swapping strategies without rewriting the war itself.",
   hook: "Define a family of interchangeable algorithms",
   analogy: "Navigation apps (Google Maps, Waze). You pick a route strategy: fastest, shortest, avoid tolls, scenic route. The app uses the same input (origin + destination) but applies a different algorithm to find the path. You can switch strategies at any time without changing the app.",
   antiPattern: `// The naive approach: switch/if-else selecting algorithm inline

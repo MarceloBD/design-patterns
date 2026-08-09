@@ -7,6 +7,7 @@ export const bridgeContent: PatternContent = {
   difficulty: "advanced",
   order: 2,
   xpReward: 150,
+  lore: "The Citadel's Twin Towers grow in two dimensions — shape and renderer, abstraction and implementation. Builders once tried to create one tower per combination: CircleOpenGL, CircleVulkan, SquareOpenGL... The towers multiplied until they blocked the sun. Learn to separate what varies independently.",
   hook: "Split a large class into two separate hierarchies that can evolve independently",
   analogy: "A TV remote control and the TV itself. The remote (abstraction) has buttons like volume up, channel change. The TV (implementation) actually does the work. You can use the same remote concept for Samsung, LG, or Sony TVs. And you can have basic or advanced remotes for any TV brand. Two dimensions that evolve independently.",
   antiPattern: `// The naive approach: class explosion from combining dimensions via inheritance

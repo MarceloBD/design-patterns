@@ -16,6 +16,7 @@ export interface PatternContent {
   difficulty: PatternDifficulty;
   order: number;
   xpReward: number;
+  lore: string;
   hook: string;
   analogy: string;
   antiPattern: string;

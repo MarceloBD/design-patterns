@@ -75,16 +75,16 @@ function buildTreeLayout(): { nodes: TreeNode[]; connections: TreeConnection[] }
 }
 
 const STATUS_COLORS: Record<PatternStatus, string> = {
-  locked: "#1e2a3e",
-  available: "#00d4aa",
-  "in-progress": "#4af0cc",
-  completed: "#00e846",
+  locked: "var(--border-default)",
+  available: "var(--accent-teal)",
+  "in-progress": "var(--accent-teal-light)",
+  completed: "var(--accent-green)",
 };
 
 const CATEGORY_COLORS: Record<PatternCategory, string> = {
-  creational: "#ff8844",
-  structural: "#44aaff",
-  behavioral: "#cc44ff",
+  creational: "var(--realm-creational)",
+  structural: "var(--realm-structural)",
+  behavioral: "var(--realm-behavioral)",
 };
 
 export function SkillTree() {
@@ -154,7 +154,7 @@ export function SkillTree() {
                 y1={fromNode.y}
                 x2={toNode.x}
                 y2={toNode.y}
-                stroke={isActive ? STATUS_COLORS.completed : "#1e2a3e"}
+                stroke={isActive ? STATUS_COLORS.completed : "var(--border-default)"}
                 strokeWidth={isCrossConnection ? 1 : 2}
                 strokeDasharray={isCrossConnection ? "4 4" : undefined}
                 opacity={isActive ? 0.8 : 0.3}
@@ -189,14 +189,14 @@ export function SkillTree() {
                   opacity={node.status === "locked" ? 0.4 : 1}
                 />
                 {node.status === "completed" && (
-                  <text x={node.x} y={node.y + 5} textAnchor="middle" fill="#00e846" fontSize="16">
+                  <text x={node.x} y={node.y + 5} textAnchor="middle" fill="var(--accent-green)" fontSize="16">
                     ✓
                   </text>
                 )}
                 {node.status === "locked" && (
                   <g transform={`translate(${node.x - 6}, ${node.y - 7})`}>
-                    <rect x="2" y="6" width="8" height="7" rx="1" fill="#5c6e84" />
-                    <path d="M3 6V4a3 3 0 0 1 6 0v2" fill="none" stroke="#5c6e84" strokeWidth="1.5" strokeLinecap="round" />
+                    <rect x="2" y="6" width="8" height="7" rx="1" fill="var(--text-faint)" />
+                    <path d="M3 6V4a3 3 0 0 1 6 0v2" fill="none" stroke="var(--text-faint)" strokeWidth="1.5" strokeLinecap="round" />
                   </g>
                 )}
                 {node.status === "available" && (
@@ -221,7 +221,7 @@ export function SkillTree() {
                   x={node.x}
                   y={node.y + 38}
                   textAnchor="middle"
-                  fill={node.status === "locked" ? "#5c6e84" : "#e8edf5"}
+                  fill={node.status === "locked" ? "var(--text-faint)" : "var(--text-primary)"}
                   fontSize="10"
                   fontWeight="500"
                 >
@@ -237,7 +237,7 @@ export function SkillTree() {
                     <p style={{
                       fontSize: "9px",
                       lineHeight: "1.4",
-                      color: "#8a9cb4",
+                      color: "var(--text-muted)",
                       textAlign: "center",
                       fontWeight: 400,
                       overflow: "hidden",

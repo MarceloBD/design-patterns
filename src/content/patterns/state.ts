@@ -7,6 +7,7 @@ export const stateContent: PatternContent = {
   difficulty: "intermediate",
   order: 7,
   xpReward: 150,
+  lore: "The Shifting Halls change their very nature depending on who enters. A door that opens when you approach, locks when you leave, and vanishes when the day ends. Each state is its own entity with its own rules. No if-else chains here — just transformation.",
   hook: "Let an object change its behavior when its internal state changes",
   analogy: "A phone's behavior changes based on its state. When locked: pressing buttons shows the lock screen. When unlocked: buttons open apps. When in a call: buttons control volume. Same phone, same buttons — completely different behavior depending on its current state.",
   antiPattern: `// The naive approach: giant if-else chains checking state in every method

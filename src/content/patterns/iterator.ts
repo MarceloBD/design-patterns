@@ -7,6 +7,7 @@ export const iteratorContent: PatternContent = {
   difficulty: "beginner",
   order: 3,
   xpReward: 150,
+  lore: "The Great Archive stores knowledge in trees, graphs, linked chains, and crystalline arrays. Each requires different traversal magic. The old Iterator enchantment let scholars walk any collection with the same stride. That enchantment faded. Recast it.",
   hook: "Traverse a collection without exposing its internal structure",
   analogy: "A TV remote's channel buttons. You press 'next' to go to the next channel without knowing how the TV stores channels internally (array? linked list? satellite feed?). The remote gives you sequential access regardless of the underlying data structure.",
   antiPattern: `// The naive approach: exposing internal structure to clients

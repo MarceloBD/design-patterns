@@ -7,6 +7,7 @@ export const chainOfResponsibilityContent: PatternContent = {
   difficulty: "intermediate",
   order: 1,
   xpReward: 150,
+  lore: "The Storm Nexus messenger towers once passed requests from handler to handler. Auth checked first. Then rate-limiting. Then formatting. Each tower could stop the message or pass it on. Now messages pile up at the first broken tower. Rebuild the chain.",
   hook: "Pass requests along a chain of handlers until one handles it",
   analogy: "Customer support escalation. You call with a problem. First, the automated system tries. If it can't help, a junior rep takes over. If they can't solve it, a senior agent gets involved. If even they're stuck, it escalates to a manager. Each level decides: handle it or pass it up the chain.",
   antiPattern: `// The naive approach: one massive function with nested if-else for all checks

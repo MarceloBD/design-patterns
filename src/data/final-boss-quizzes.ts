@@ -11,7 +11,7 @@ interface FinalBossData {
 const FINAL_BOSS_QUIZZES: Record<PatternCategory, FinalBossData> = {
   creational: {
     title: "The Architect of Genesis",
-    lore: "The master of all creation awaits. Only those who truly understand how objects come to life may pass beyond this realm. This ancient construct tests your mastery of every forging technique — from the simplest factory to the most complex prototype registry.",
+    lore: "Once the Pattern God's most devoted servant, the Architect was tasked with teaching creation to mortals. When the God vanished, he went mad with abandonment — hoarding creation knowledge, spawning malformed objects to fill the void. His betrayal was not malice but grief. He believed if he kept creating alone, perhaps the God would return. Now you must prove that creation belongs to all, not one.",
     summary: [
       "Factory Method delegates instantiation to subclasses via an overridable method, producing one product at a time.",
       "Abstract Factory creates entire families of related products through a single factory interface, ensuring consistency.",
@@ -39,7 +39,7 @@ const FINAL_BOSS_QUIZZES: Record<PatternCategory, FinalBossData> = {
   },
   structural: {
     title: "The Weaver of Bonds",
-    lore: "At the summit of the Crystal Spires, the Weaver tests whether you can truly bind incompatible forces, wrap objects in new power, and compose structures that scale infinitely. Only architects who understand how to assemble without breaking may claim the Structural Crown.",
+    lore: "A perfectionist driven to insanity by the crumbling of her perfect structures. The Weaver was the Pattern God's architect of relationships — she understood how objects should relate without becoming dependent. When the world started breaking, she tried to hold it together alone, weaving more and more connections until she became the problem she fought. Sever her tangled threads to free her.",
     summary: [
       "Adapter wraps an incompatible interface to match what clients expect, acting as a translator between two existing systems.",
       "Bridge separates abstraction from implementation into two independent hierarchies connected by composition.",
@@ -69,7 +69,7 @@ const FINAL_BOSS_QUIZZES: Record<PatternCategory, FinalBossData> = {
   },
   behavioral: {
     title: "The Conductor of Storms",
-    lore: "In the eye of the eternal tempest, the Conductor orchestrates all behavior — commanding, observing, iterating, and mediating between a thousand forces. Prove that you understand not just what objects ARE, but how they COMMUNICATE and DECIDE.",
+    lore: "Once the maestro who orchestrated all communication in Architectura, the Conductor channeled the Pattern God's will — every observer, every mediator, every chain flowed through his tower. When the God fell silent, the Conductor's tower amplified that silence into a roar. He now drowns the world in noise to avoid confronting the quiet. Silence his storm to restore clarity.",
     summary: [
       "Chain of Responsibility passes requests along a chain of handlers until one processes it.",
       "Command encapsulates operations as objects, enabling undo, queuing, and logging.",

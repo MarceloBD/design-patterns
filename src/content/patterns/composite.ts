@@ -7,6 +7,7 @@ export const compositeContent: PatternContent = {
   difficulty: "intermediate",
   order: 3,
   xpReward: 150,
+  lore: "The Crystal Forest stretches endlessly — trees made of smaller trees, branches holding branches. Files within folders within folders. The Citadel's file system has collapsed because no one remembers how to treat a single leaf the same as an entire branch. Restore the recursive harmony.",
   hook: "Compose objects into tree structures and treat them uniformly",
   analogy: "A file system. A folder can contain files and other folders. When you ask 'what's the total size?', a file returns its own size. A folder returns the sum of all its children's sizes (including nested folders). You treat both files and folders through the same interface — they're all 'file system items'.",
   antiPattern: `// The naive approach: type-checking at every level

@@ -7,6 +7,7 @@ export const commandContent: PatternContent = {
   difficulty: "intermediate",
   order: 2,
   xpReward: 150,
+  lore: "In the Nexus armory, every action was once a scroll — a command object that could be stored, sent across the realm, undone if regretted, or replayed for training. The armory is sealed. Its scrolls hold the power of undo itself.",
   hook: "Turn requests into stand-alone objects with all request info",
   analogy: "A restaurant order ticket. The waiter writes down your order (command object) and puts it in the queue. The kitchen (receiver) executes it whenever ready. The ticket can be queued, delayed, logged, or even undone (if you change your mind before cooking starts). The waiter doesn't cook — they just create command objects.",
   antiPattern: `// The naive approach: button handlers directly call business logic

@@ -659,7 +659,7 @@ function BattlePhase({
 
 function VictoryPhase({ correctCount, totalQuestions, dialogue }: { correctCount: number; totalQuestions: number; dialogue: string }) {
   return (
-    <div className="text-center pt-12 animate-[fade-in_1.5s_ease-out]">
+    <div className="text-center pt-8 animate-[fade-in_1.5s_ease-out]">
       <div className="mb-8">
         <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-amber-400 mb-6 animate-[spin-slow_8s_linear_infinite]">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
@@ -667,10 +667,10 @@ function VictoryPhase({ correctCount, totalQuestions, dialogue }: { correctCount
           </svg>
         </div>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-pink-300 to-purple-300 mb-3 font-[var(--font-display)] italic">
-          Pattern God Defeated!
+          Eternox Falls
         </h2>
         <p className="text-purple-200/80 italic text-sm mb-6">&ldquo;{dialogue}&rdquo;</p>
-        <div className="flex justify-center gap-4 text-[11px]">
+        <div className="flex justify-center gap-4 text-[11px] flex-wrap">
           <span className="px-3 py-1.5 rounded-lg bg-green-500/10 border border-green-500/30 text-green-300">
             {correctCount}/{totalQuestions} correct
           </span>
@@ -683,11 +683,44 @@ function VictoryPhase({ correctCount, totalQuestions, dialogue }: { correctCount
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto p-6 rounded-2xl bg-black/30 border border-purple-500/20 mb-8">
-        <p className="text-[13px] text-purple-200/70 leading-[1.8]">
-          You have defeated the ultimate challenge. All 22 design patterns have been truly mastered.
-          You now bear the title of <strong className="text-amber-300">Pattern God</strong> — the highest honor
-          a developer can achieve in this realm.
+      {/* Epilogue */}
+      <div className="max-w-xl mx-auto mb-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent mb-6" />
+        <span className="text-[8px] font-semibold uppercase tracking-[0.4em] text-amber-400/60 block mb-4">
+          ~ Epilogue ~
+        </span>
+
+        <div className="space-y-4 text-left">
+          <p className="text-[12px] leading-[2] text-purple-200/60 italic">
+            The Pattern God — Eternox — falls to his knees. Not in defeat, but in relief.
+            For the first time in millennia, someone has understood what he could not:
+            that no single pattern rules all, that each has its place, that complexity is tamed
+            not by one answer but by twenty-two working in concert.
+          </p>
+          <p className="text-[12px] leading-[2] text-purple-200/60 italic">
+            The veil dissolves. The three realms shudder — and begin to drift back together.
+            The Forge of Origins ignites with renewed purpose. The Crystal Citadel&apos;s fractures seal
+            with golden light. The Storm Nexus calms to a steady, purposeful hum.
+          </p>
+          <p className="text-[12px] leading-[2] text-purple-200/60 italic">
+            Eternox offers you his crown — not of gold, but of pure abstraction.
+            You are no longer just a developer. You are the new <strong className="text-amber-300 not-italic">Pattern God</strong>.
+            The Grimoire in your hands blazes with complete inscription: all 22 Patterns, living and breathing.
+          </p>
+          <p className="text-[12px] leading-[2] text-purple-200/60 italic">
+            Architectura is whole once more. The Spaghetti retreats to the edges of the realm.
+            And in villages across the land, young developers open their first editors —
+            not knowing that the patterns they will learn are alive because of you.
+          </p>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-purple-400/20 to-transparent mt-6 mb-6" />
+
+        <p className="text-[11px] text-center text-amber-300/70 italic leading-[1.8]">
+          &ldquo;Every great codebase begins with a single well-placed abstraction.
+          You have proven that mastery is not knowing one perfect answer,
+          but knowing which of many answers fits the question before you.
+          Go forth and architect.&rdquo;
         </p>
       </div>
 

@@ -7,6 +7,7 @@ export const mediatorContent: PatternContent = {
   difficulty: "intermediate",
   order: 4,
   xpReward: 150,
+  lore: "The Nexus Control Tower once coordinated a hundred components — none speaking to each other directly, all communicating through the tower. When the tower fell silent, chaos erupted. Components screamed into the void, unheard. Rebuild the central coordinator.",
   hook: "Reduce chaotic dependencies by centralizing communication",
   analogy: "An air traffic control tower. Planes don't communicate directly with each other (that would be chaos with 50 planes). Instead, every plane talks only to the tower, and the tower coordinates all of them. The tower is the mediator — it knows about all planes and manages their interactions.",
   antiPattern: `// The naive approach: every component references every other component directly

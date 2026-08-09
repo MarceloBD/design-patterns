@@ -7,6 +7,7 @@ export const proxyContent: PatternContent = {
   difficulty: "intermediate",
   order: 7,
   xpReward: 150,
+  lore: "The Citadel's treasury is guarded by a Stand-In — an entity with the same face as the treasure within. It decides who may pass, when to fetch the real treasure, and whether to serve a cached copy. Learn the art of controlling access without becoming the thing you protect.",
   hook: "Provide a substitute that controls access to another object",
   analogy: "A credit card is a proxy for your bank account. It provides the same interface (paying for things) but adds access control (PIN verification, spending limits), lazy loading (doesn't transfer money until you swipe), and logging (transaction history). The merchant doesn't interact with your bank account directly.",
   antiPattern: `// The naive approach: mixing access control, caching, logging into the main class

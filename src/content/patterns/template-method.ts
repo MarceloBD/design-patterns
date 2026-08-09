@@ -7,6 +7,7 @@ export const templateMethodContent: PatternContent = {
   difficulty: "beginner",
   order: 9,
   xpReward: 150,
+  lore: "The Training Grounds follow an ancient regiment: warm up, drill, cool down. Every recruit follows this order. But each regiment fills in the steps differently — archers drill aim, mages drill incantations. The skeleton is sacred. The steps are personal.",
   hook: "Define the skeleton of an algorithm, letting subclasses fill in steps",
   analogy: "A recipe template. 'Making a hot beverage' always follows: boil water → brew → pour into cup → add condiments. But the specifics differ: tea steeps leaves, coffee uses grounds; tea adds lemon, coffee adds sugar. The algorithm structure is fixed, but individual steps vary.",
   antiPattern: `// The naive approach: duplicating the algorithm structure in every class

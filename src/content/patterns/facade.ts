@@ -7,6 +7,7 @@ export const facadeContent: PatternContent = {
   difficulty: "beginner",
   order: 5,
   xpReward: 150,
+  lore: "The Citadel's Grand Library contains a thousand subsystems. Scholars once spent years learning each one. Then the Librarian created a single desk — one simple interface that handled all requests. The desk is unmanned now. You must understand what it hid to rebuild it.",
   hook: "Provide a simplified interface to a complex subsystem",
   analogy: "A hotel concierge. Behind the scenes, there's housekeeping, room service, transportation, booking systems, and restaurant reservations. You don't call each department separately — you tell the concierge what you need, and they coordinate everything. The concierge is the Facade to the hotel's complex internal systems.",
   antiPattern: `// The naive approach: client code directly orchestrates every subsystem
