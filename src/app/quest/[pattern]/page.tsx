@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Navigation } from "@/components/Navigation";
 import { QuestContent } from "@/components/interactive/QuestContent";
+import { QuestGate } from "@/components/interactive/QuestGate";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { Footer } from "@/components/Footer";
 import { WeatherEffect } from "@/components/effects/WeatherEffect";
@@ -84,7 +85,9 @@ export default async function QuestPage({ params }: QuestPageProps) {
           </div>
         </header>
 
-        <QuestContent content={content} quiz={quiz} />
+        <QuestGate patternSlug={meta.slug} category={meta.category}>
+          <QuestContent content={content} quiz={quiz} />
+        </QuestGate>
       </main>
       <Footer />
     </>

@@ -44,6 +44,8 @@ export function useQuiz(quiz: PatternQuiz) {
   });
 
   const startTimeRef = useRef(Date.now());
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
   const totalQuestions = state.shuffledQuestions.length;
@@ -73,36 +75,38 @@ export function useQuiz(quiz: PatternQuiz) {
 
   const submitQuiz = useCallback((lastAnswer?: { questionId: string; optionId: string }): QuizResult => {
     const timeSpent = Math.round((Date.now() - startTimeRef.current) / 1000);
-    let computedResult: QuizResult | null = null;
+    const current = stateRef.current;
 
-    setState((previous) => {
-      const answers = lastAnswer
-        ? { ...previous.selectedAnswers, [lastAnswer.questionId]: lastAnswer.optionId }
-        : previous.selectedAnswers;
+    const answers = lastAnswer
+      ? { ...current.selectedAnswers, [lastAnswer.questionId]: lastAnswer.optionId }
+      : current.selectedAnswers;
 
-      let correctCount = 0;
-      for (const question of previous.shuffledQuestions) {
-        if (answers[question.id] === question.correctOptionId) {
-          correctCount++;
-        }
+    let correctCount = 0;
+    for (const question of current.shuffledQuestions) {
+      if (answers[question.id] === question.correctOptionId) {
+        correctCount++;
       }
+    }
 
-      const total = previous.shuffledQuestions.length;
-      const percentage = Math.round((correctCount / total) * 100);
-      const result: QuizResult = {
-        patternSlug: quiz.patternSlug,
-        score: correctCount,
-        totalQuestions: total,
-        percentage,
-        passed: percentage >= quiz.passingScore,
-        timeSpent,
-      };
+    const total = current.shuffledQuestions.length;
+    const percentage = Math.round((correctCount / total) * 100);
+    const result: QuizResult = {
+      patternSlug: quiz.patternSlug,
+      score: correctCount,
+      totalQuestions: total,
+      percentage,
+      passed: percentage >= quiz.passingScore,
+      timeSpent,
+    };
 
-      computedResult = result;
-      return { ...previous, selectedAnswers: answers, isSubmitted: true, result };
-    });
+    setState((previous) => ({
+      ...previous,
+      selectedAnswers: answers,
+      isSubmitted: true,
+      result,
+    }));
 
-    return computedResult!;
+    return result;
   }, [quiz.patternSlug, quiz.passingScore]);
 
   const resetQuiz = useCallback(() => {
