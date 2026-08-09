@@ -15,24 +15,24 @@ interface RealmPageProps {
   params: Promise<{ category: string }>;
 }
 
-const REALM_THEME: Record<string, { gradient: string; bgStyle: React.CSSProperties; accentColor: string; glowColor: string; lore: string }> = {
+const REALM_THEME: Record<string, { gradient: string; bgClass: string; accentColor: string; glowColor: string; lore: string }> = {
   creational: {
     gradient: "from-[var(--realm-creational)] via-[var(--border-default)] to-[var(--realm-creational-dark)]",
-    bgStyle: { background: "linear-gradient(180deg, #1a0500 0%, #0d0400 40%, var(--surface-base) 100%)" },
+    bgClass: "realm-hero-creational",
     accentColor: "var(--realm-creational)",
     glowColor: "rgba(255, 136, 68, 0.08)",
     lore: "Deep beneath volcanic peaks, ancient forges burn eternal.",
   },
   structural: {
     gradient: "from-[var(--realm-structural)] via-[var(--border-default)] to-[var(--realm-structural-dark)]",
-    bgStyle: { background: "linear-gradient(180deg, #000a1a 0%, #000812 40%, var(--surface-base) 100%)" },
+    bgClass: "realm-hero-structural",
     accentColor: "var(--realm-structural)",
     glowColor: "rgba(68, 170, 255, 0.08)",
     lore: "Impossibly tall spires of crystallized logic pierce the frozen sky.",
   },
   behavioral: {
     gradient: "from-[var(--realm-behavioral)] via-[var(--border-default)] to-[var(--realm-behavioral-dark)]",
-    bgStyle: { background: "linear-gradient(180deg, #0d0019 0%, #080012 40%, var(--surface-base) 100%)" },
+    bgClass: "realm-hero-behavioral",
     accentColor: "var(--realm-behavioral)",
     glowColor: "rgba(204, 68, 255, 0.08)",
     lore: "Thunder never rests in this tempest realm.",
@@ -71,7 +71,7 @@ export default async function RealmPage({ params }: RealmPageProps) {
       <Navigation />
       <main className="relative z-10">
         {/* Themed hero header with background */}
-        <div className="relative overflow-hidden" style={theme.bgStyle}>
+        <div className={`relative overflow-hidden ${theme.bgClass}`}>
           {/* Background landscape image */}
           <Image
             src={`/realms/${typedCategory}.svg`}

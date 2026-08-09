@@ -1,26 +1,32 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { exportProgress, importProgress } from "@/stores/gameStore";
+import { exportProgressEncrypted, importProgressEncrypted } from "@/stores/gameStore";
 import { useGameStore } from "@/hooks/useGameStore";
 
 export function ProgressSync() {
   const [importStatus, setImportStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isExporting, setIsExporting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { refreshPlayer } = useGameStore();
 
-  const handleExport = useCallback(() => {
-    const data = exportProgress();
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `design-patterns-progress-${new Date().toISOString().split("T")[0]}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+  const handleExport = useCallback(async () => {
+    setIsExporting(true);
+    try {
+      const data = await exportProgressEncrypted();
+      const blob = new Blob([data], { type: "application/octet-stream" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `pattern-quest-save-${new Date().toISOString().split("T")[0]}.pqsave`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } finally {
+      setIsExporting(false);
+    }
   }, []);
 
   const handleImport = useCallback(() => {
@@ -32,9 +38,9 @@ export function ProgressSync() {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (readEvent) => {
+    reader.onload = async (readEvent) => {
       const text = readEvent.target?.result as string;
-      const result = importProgress(text);
+      const result = await importProgressEncrypted(text);
       if (result.success) {
         setImportStatus("success");
         refreshPlayer();
@@ -64,28 +70,29 @@ export function ProgressSync() {
           </span>
         </div>
         <p className="text-[11px] text-[var(--text-muted)] mb-4 leading-[1.7]">
-          Export your progress to a file and import it on another device to continue your journey.
+          Export your encrypted save file and import it on another device. Save files are protected against tampering.
         </p>
 
         <div className="flex gap-2">
           <button
             onClick={handleExport}
-            className="flex-1 py-2 px-3 rounded-lg bg-[var(--accent-teal)]/10 border border-[var(--accent-teal)]/30 text-[var(--accent-teal)] text-[11px] font-semibold hover:bg-[var(--accent-teal)]/20 transition-all"
+            disabled={isExporting}
+            className="flex-1 py-2 px-3 rounded-lg bg-[var(--accent-teal)]/10 border border-[var(--accent-teal)]/30 text-[var(--accent-teal)] text-[11px] font-semibold hover:bg-[var(--accent-teal)]/20 transition-all disabled:opacity-50"
           >
-            Export Progress
+            {isExporting ? "Encrypting..." : "Export Save"}
           </button>
           <button
             onClick={handleImport}
             className="flex-1 py-2 px-3 rounded-lg bg-[var(--accent-blue)]/10 border border-[var(--accent-blue)]/30 text-[var(--accent-blue)] text-[11px] font-semibold hover:bg-[var(--accent-blue)]/20 transition-all"
           >
-            Import Progress
+            Import Save
           </button>
         </div>
 
         <input
           ref={fileInputRef}
           type="file"
-          accept=".json"
+          accept=".pqsave,.json"
           onChange={handleFileChange}
           className="hidden"
         />

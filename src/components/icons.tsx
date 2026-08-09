@@ -5,11 +5,17 @@ interface IconProps {
 
 export function SwordIcon({ className = "", size = 24 }: IconProps) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5" />
-      <line x1="13" y1="19" x2="19" y2="13" />
-      <line x1="16" y1="16" x2="20" y2="20" />
-      <line x1="19" y1="21" x2="21" y2="19" />
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+      {/* Blade */}
+      <path d="M12 1L13.5 3L13 8L14 12L12 14L10 12L11 8L10.5 3Z" opacity="0.9" />
+      {/* Blade edge highlight */}
+      <path d="M12 2L12.8 4L12.5 9L12 11L11.5 9L11.2 4Z" fill="currentColor" opacity="0.5" />
+      {/* Guard */}
+      <rect x="8" y="14" width="8" height="2" rx="1" />
+      {/* Grip */}
+      <rect x="11" y="16" width="2" height="4" rx="0.5" opacity="0.7" />
+      {/* Pommel */}
+      <circle cx="12" cy="21.5" r="1.5" />
     </svg>
   );
 }

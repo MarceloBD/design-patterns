@@ -12,28 +12,34 @@ export default function ShopPage() {
   return (
     <>
       <Navigation />
-      <main className="pt-16 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
-        <header className="mb-8 pt-4">
-          <div className="rounded-2xl p-[1px] bg-gradient-to-br from-[var(--realm-creational)] via-[var(--border-default)] to-[var(--accent-teal)]">
-            <div className="rounded-[15px] bg-[var(--surface-raised)] overflow-hidden relative">
-              <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[var(--realm-creational)] opacity-[0.03]" />
-              <div className="relative p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <MerchantSprite />
-                  <div>
-                    <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)] block">Trading Post</span>
-                    <h1 className="text-2xl font-extrabold tracking-tight text-[var(--text-primary)]">Merchant&apos;s Shop</h1>
-                  </div>
-                </div>
-                <p className="text-[13px] leading-[1.8] text-[var(--text-muted)] mt-2">
-                  Spend your hard-earned coins on armor, potions, and magical scrolls. Find hidden coins scattered throughout your quests!
-                </p>
+      <main className="pt-16 pb-12 relative z-10">
+        <header className="mb-8 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #1a0800 0%, #2d1000 30%, #1a0600 60%, #0d0300 100%)" }}>
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute top-4 left-[20%] w-1 h-1 rounded-full bg-orange-400 animate-pulse" />
+            <div className="absolute top-12 right-[30%] w-1.5 h-1.5 rounded-full bg-amber-300 animate-pulse" style={{ animationDelay: "1s" }} />
+            <div className="absolute bottom-8 left-[60%] w-1 h-1 rounded-full bg-orange-300 animate-pulse" style={{ animationDelay: "2s" }} />
+          </div>
+          <div className="relative px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto py-10">
+            <div className="flex items-center gap-4">
+              <MerchantSprite />
+              <div>
+                <span className="text-[8px] font-semibold uppercase tracking-[0.3em] text-orange-400/70 block mb-1">
+                  Trading Post
+                </span>
+                <h1 className="text-3xl font-extrabold tracking-tight text-orange-100 italic font-[var(--font-display)]">
+                  Merchant&apos;s Shop
+                </h1>
               </div>
             </div>
+            <p className="text-[12px] leading-[1.9] text-orange-200/50 mt-3 max-w-lg italic">
+              &ldquo;Welcome, traveler. My wares are forged from the remnants of the old world. Every item carries a piece of Architectura&apos;s history. Spend wisely — coins are hard-won in these broken lands.&rdquo;
+            </p>
           </div>
         </header>
 
-        <ShopContent />
+        <div className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+          <ShopContent />
+        </div>
       </main>
       <Footer />
     </>

@@ -20,6 +20,12 @@ interface TreeConnection {
   to: string;
 }
 
+const FINAL_BOSS_NODES: Record<PatternCategory, { slug: string; name: string }> = {
+  creational: { slug: "final-boss-creational", name: "Architect of Genesis" },
+  structural: { slug: "final-boss-structural", name: "Weaver of Bonds" },
+  behavioral: { slug: "final-boss-behavioral", name: "Conductor of Storms" },
+};
+
 function buildTreeLayout(): { nodes: TreeNode[]; connections: TreeConnection[] } {
   const nodes: TreeNode[] = [];
   const connections: TreeConnection[] = [];
@@ -49,6 +55,21 @@ function buildTreeLayout(): { nodes: TreeNode[]; connections: TreeConnection[] }
           to: pattern.slug,
         });
       }
+    });
+
+    const boss = FINAL_BOSS_NODES[category];
+    const bossY = startY + patterns.length * spacing;
+    nodes.push({
+      slug: boss.slug,
+      name: boss.name,
+      category,
+      x: baseX,
+      y: bossY,
+      status: "locked",
+    });
+    connections.push({
+      from: patterns[patterns.length - 1].slug,
+      to: boss.slug,
     });
   });
 
@@ -89,25 +110,35 @@ const CATEGORY_COLORS: Record<PatternCategory, string> = {
 
 export function SkillTree() {
   const router = useRouter();
-  const { getStatus, isHydrated } = useGameStore();
+  const { getStatus, isHydrated, player } = useGameStore();
   const { play } = useSound();
 
   const { nodes, connections } = buildTreeLayout();
 
-  const nodesWithStatus = nodes.map((node) => ({
-    ...node,
-    status: isHydrated ? getStatus(node.slug) : node.status,
-  }));
+  const nodesWithStatus = nodes.map((node) => {
+    if (node.slug.startsWith("final-boss-")) {
+      const category = node.slug.replace("final-boss-", "") as PatternCategory;
+      const categoryPatterns = getPatternsByCategory(category);
+      const allCompleted = isHydrated && categoryPatterns.every((p) => player.completedPatterns?.includes(p.slug));
+      const isDefeated = isHydrated && player.completedPatterns?.includes(node.slug);
+      return { ...node, status: isDefeated ? "completed" as PatternStatus : allCompleted ? "available" as PatternStatus : "locked" as PatternStatus };
+    }
+    return { ...node, status: isHydrated ? getStatus(node.slug) : node.status };
+  });
 
   const handleNodeClick = (slug: string, status: PatternStatus) => {
-    if (status !== "locked") {
-      play("click");
-      router.push(`/quest/${slug}`);
+    if (status === "locked") return;
+    play("click");
+    if (slug.startsWith("final-boss-")) {
+      const category = slug.replace("final-boss-", "");
+      router.push(`/final-boss/${category}`);
+      return;
     }
+    router.push(`/quest/${slug}`);
   };
 
   const svgWidth = 800;
-  const svgHeight = 1300;
+  const svgHeight = 1500;
 
   return (
     <div className="w-full overflow-x-auto scrollbar-thin" data-hydrated="true">
@@ -217,6 +248,15 @@ export function SkillTree() {
 
             return (
               <g key={`label-${node.slug}`}>
+                {/* Background rect to occlude connection lines behind text */}
+                <rect
+                  x={node.x - 72}
+                  y={node.y + 26}
+                  width={144}
+                  height={patternMeta && node.status !== "locked" ? 62 : 20}
+                  fill="var(--surface-base)"
+                  rx={4}
+                />
                 <text
                   x={node.x}
                   y={node.y + 38}

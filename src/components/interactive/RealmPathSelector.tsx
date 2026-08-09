@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useGameStore } from "@/hooks/useGameStore";
@@ -19,6 +20,7 @@ interface RealmPath {
   glowColor: string;
   bgImage: string;
   bgStyle: React.CSSProperties;
+  bgStyleLight: React.CSSProperties;
 }
 
 const REALM_PATHS: RealmPath[] = [
@@ -35,6 +37,9 @@ const REALM_PATHS: RealmPath[] = [
     bgStyle: {
       background: "linear-gradient(135deg, #1a0500 0%, #2d0a00 20%, #1a0800 50%, #0d0400 80%, #0a0200 100%)",
     },
+    bgStyleLight: {
+      background: "linear-gradient(135deg, #fef3e8 0%, #fde6d0 20%, #fef0e0 50%, #fff8f2 80%, #ffffff 100%)",
+    },
   },
   {
     category: "structural",
@@ -49,6 +54,9 @@ const REALM_PATHS: RealmPath[] = [
     bgStyle: {
       background: "linear-gradient(135deg, #000a1a 0%, #001530 20%, #000d1f 50%, #000812 80%, #000408 100%)",
     },
+    bgStyleLight: {
+      background: "linear-gradient(135deg, #e8f4ff 0%, #d4ecff 20%, #e6f2ff 50%, #f2f9ff 80%, #ffffff 100%)",
+    },
   },
   {
     category: "behavioral",
@@ -62,6 +70,9 @@ const REALM_PATHS: RealmPath[] = [
     bgImage: "radial-gradient(ellipse at 60% 40%, rgba(160, 50, 255, 0.1) 0%, transparent 50%), radial-gradient(circle at 30% 80%, rgba(100, 0, 200, 0.06) 0%, transparent 40%)",
     bgStyle: {
       background: "linear-gradient(135deg, #0d0019 0%, #1a0033 20%, #0f001f 50%, #080012 80%, #040008 100%)",
+    },
+    bgStyleLight: {
+      background: "linear-gradient(135deg, #f5eaff 0%, #eddcff 20%, #f2e8ff 50%, #f9f4ff 80%, #ffffff 100%)",
     },
   },
 ];
@@ -128,9 +139,23 @@ function RealmWeather({ category }: { category: PatternCategory }) {
   );
 }
 
+function useTheme(): "dark" | "light" {
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  useEffect(() => {
+    const root = document.documentElement;
+    const update = () => setTheme(root.getAttribute("data-theme") === "light" ? "light" : "dark");
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
+  return theme;
+}
+
 export function RealmPathSelector() {
   const { getProgress, isHydrated } = useGameStore();
   const { play, startMusic, stopMusic } = useSound();
+  const theme = useTheme();
 
   return (
     <div className="space-y-0">
@@ -152,7 +177,7 @@ export function RealmPathSelector() {
             {/* Full width wallpaper section */}
             <div
               className="relative w-full min-h-[360px] sm:min-h-[420px] overflow-hidden border-b border-[var(--border-subtle)] transition-all duration-700 group-hover:min-h-[440px] sm:group-hover:min-h-[480px]"
-              style={realm.bgStyle}
+              style={theme === "light" ? realm.bgStyleLight : realm.bgStyle}
             >
               {/* Background landscape image */}
               <Image
@@ -176,8 +201,8 @@ export function RealmPathSelector() {
               />
 
               {/* Gradient overlay for text readability */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+              <div className={`absolute inset-0 ${theme === "light" ? "bg-gradient-to-r from-white/80 via-white/40 to-transparent" : "bg-gradient-to-r from-black/70 via-black/30 to-transparent"}`} />
+              <div className={`absolute inset-0 ${theme === "light" ? "bg-gradient-to-t from-white/70 via-transparent to-white/20" : "bg-gradient-to-t from-black/60 via-transparent to-black/20"}`} />
 
               {/* Content */}
               <div className="relative z-10 h-full flex flex-col justify-end p-8 sm:p-12 lg:p-16 max-w-4xl">

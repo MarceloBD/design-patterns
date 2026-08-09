@@ -65,11 +65,41 @@ export function resetPlayerState(): void {
 export function exportProgress(): string {
   const state = loadPlayerState();
   const exportData = {
-    version: 1,
+    version: 2,
     exportedAt: new Date().toISOString(),
     data: state,
   };
   return JSON.stringify(exportData);
+}
+
+export async function exportProgressEncrypted(): Promise<string> {
+  const { encryptSaveData } = await import("@/lib/save-encryption");
+  const plaintext = exportProgress();
+  return encryptSaveData(plaintext);
+}
+
+export async function importProgressEncrypted(encryptedData: string): Promise<{ success: boolean; error?: string }> {
+  const { decryptSaveData, isEncryptedFormat, isLegacyJsonFormat } = await import("@/lib/save-encryption");
+
+  try {
+    let jsonString: string;
+
+    if (isEncryptedFormat(encryptedData)) {
+      try {
+        jsonString = await decryptSaveData(encryptedData);
+      } catch {
+        return { success: false, error: "Decryption failed. This save may be from another device or corrupted." };
+      }
+    } else if (isLegacyJsonFormat(encryptedData)) {
+      jsonString = encryptedData;
+    } else {
+      return { success: false, error: "Unrecognized save format" };
+    }
+
+    return importProgress(jsonString);
+  } catch {
+    return { success: false, error: "Failed to process save data" };
+  }
 }
 
 export function importProgress(jsonString: string): { success: boolean; error?: string } {

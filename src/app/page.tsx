@@ -32,6 +32,23 @@ export default function HomePage() {
           </Link>
         </header>
 
+        {/* World Lore Introduction */}
+        <section className="mb-14 max-w-2xl mx-auto">
+          <div className="rounded-xl p-6 relative overflow-hidden" style={{ borderColor: "var(--border-lore)", border: "1px solid var(--border-lore)", background: "var(--surface-lore)" }}>
+            <div className="absolute top-0 left-0 w-1 h-full" style={{ background: "linear-gradient(to bottom, var(--text-lore-accent), transparent)" }} />
+            <span className="text-[8px] font-semibold uppercase tracking-[0.3em] block mb-3" style={{ color: "var(--text-lore-accent)" }}>
+              The Story So Far
+            </span>
+            <p className="text-[12px] leading-[2] italic" style={{ color: "var(--text-lore)" }}>
+              The realm of Architectura lies in ruin. Once a kingdom of perfect modularity — where every object was a living being
+              and every interface a sacred contract — it was shattered when the Pattern God vanished. Twenty-two Patterns, the primordial
+              forces that held everything in harmony, were forgotten. From the tangled, formless code emerged the Spaghetti — chaotic
+              entities that devour architecture and breed coupling. The ancient Grimoire has chosen you as its bearer. Master all 22
+              Patterns to restore what was lost.
+            </p>
+          </div>
+        </section>
+
         <div className="separator-dungeon mb-14" />
 
         <section className="mb-14" aria-label="Player statistics">
