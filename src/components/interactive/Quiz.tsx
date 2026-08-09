@@ -57,9 +57,9 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
   const [usedActiveItems, setUsedActiveItems] = useState<Set<string>>(new Set());
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [showTimerWarning, setShowTimerWarning] = useState(false);
-  const [bossHp, setBossHp] = useState(totalQuestions);
   const [bossHit, setBossHit] = useState(false);
   const [eliminatedOptions, setEliminatedOptions] = useState<Set<string>>(new Set());
+  const [answerResults, setAnswerResults] = useState<Map<number, boolean>>(new Map());
 
   const ownedItems = (player.inventory ?? [])
     .map((id) => SHOP_ITEMS.find((item) => item.id === id))
@@ -113,10 +113,12 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
     }
   }, [timeRemaining, isSubmitted, hasStarted]);
 
-  const handleFinalSubmit = (forceFail = false) => {
-    const quizResult = submitQuiz();
+  const handleFinalSubmit = (forceFail = false, lastAnswer?: { questionId: string; optionId: string }) => {
+    const quizResult = submitQuiz(lastAnswer);
     if (forceFail) {
       quizResult.passed = false;
+    } else {
+      quizResult.passed = true;
     }
     const earned = handleQuizComplete(quizResult);
     setRewards(earned);
@@ -132,14 +134,15 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
   const handleAnswerClick = useCallback((questionId: string, optionId: string) => {
     if (feedback !== "idle") return;
 
-    selectAnswer(questionId, optionId);
-
     const isCorrect = optionId === currentQuestion.correctOptionId;
+    const lastAnswer = { questionId, optionId };
+
+    selectAnswer(questionId, optionId);
+    setAnswerResults((previous) => new Map(previous).set(currentQuestionIndex, isCorrect));
 
     if (isCorrect) {
       setFeedback("correct");
       play("hit");
-      setBossHp((previous) => Math.max(0, previous - 1));
       setBossHit(true);
       setTimeout(() => setBossHit(false), 400);
 
@@ -147,7 +150,7 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
         setFeedback("idle");
         setEliminatedOptions(new Set());
         if (isLastQuestion) {
-          handleFinalSubmit();
+          handleFinalSubmit(false, lastAnswer);
         } else {
           goToNext();
         }
@@ -161,14 +164,14 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
           setTimeout(() => {
             setFeedback("idle");
             setEliminatedOptions(new Set());
-            handleFinalSubmit(true);
+            handleFinalSubmit(true, lastAnswer);
           }, ANSWER_FEEDBACK_DELAY);
         } else {
           setTimeout(() => {
             setFeedback("idle");
             setEliminatedOptions(new Set());
             if (isLastQuestion) {
-              handleFinalSubmit();
+              handleFinalSubmit(false, lastAnswer);
             } else {
               goToNext();
             }
@@ -191,8 +194,8 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
     setShowTimerWarning(false);
     setHearts(maxHearts);
     setFeedback("idle");
-    setBossHp(totalQuestions);
     setBossHit(false);
+    setAnswerResults(new Map());
   };
 
   const handleStart = () => {
@@ -404,40 +407,15 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
             </div>
           </div>
 
-          {/* Boss HP bar with sprite */}
-          {hasShowProgress && (
-            <div className="mb-4 pt-2">
-              <div className="flex items-center gap-3">
-                {/* Boss sprite in battle */}
-                <div
-                  className="w-10 h-10 flex-shrink-0"
-                  style={{ animation: bossHit ? bossData.hitAnimation : bossData.idleAnimation }}
-                >
-                  {bossData.sprite}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[9px] font-semibold uppercase tracking-[0.15em]" style={{ color: bossData.color }}>
-                      {bossData.name}
-                    </span>
-                    <span className="text-[9px] font-mono text-[var(--text-faint)]">
-                      {bossHp}/{totalQuestions}
-                    </span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-[var(--surface-overlay)] overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${bossHit ? "animate-[quiz-hurt_0.3s_ease-out]" : ""}`}
-                      style={{
-                        width: `${(bossHp / totalQuestions) * 100}%`,
-                        backgroundColor: bossHp > totalQuestions * 0.5 ? bossData.color : bossHp > totalQuestions * 0.25 ? "var(--realm-creational)" : "var(--accent-green)",
-                        boxShadow: bossHit ? `0 0 12px ${bossData.color}` : undefined,
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
+          {/* Boss sprite in battle */}
+          <div className="flex justify-center mb-4">
+            <div
+              className="w-12 h-12"
+              style={{ animation: bossHit ? bossData.hitAnimation : bossData.idleAnimation }}
+            >
+              {bossData.sprite}
             </div>
-          )}
+          </div>
 
           {/* Question header */}
           <div className="flex justify-between items-center mb-5">
@@ -445,18 +423,26 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
               Question {currentQuestionIndex + 1} of {totalQuestions}
             </span>
             <div className="flex gap-1.5">
-              {Array.from({ length: totalQuestions }).map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    index === currentQuestionIndex
-                      ? "bg-[var(--accent-teal)] shadow-[0_0_5px_rgba(0,212,170,0.6)]"
-                      : index < currentQuestionIndex
-                      ? "bg-[var(--accent-green)]"
-                      : "bg-[var(--border-default)]"
-                  }`}
-                />
-              ))}
+              {Array.from({ length: totalQuestions }).map((_, index) => {
+                const answered = answerResults.has(index);
+                const wasCorrect = answerResults.get(index);
+                const isCurrent = index === currentQuestionIndex;
+
+                return (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      isCurrent
+                        ? "bg-[var(--accent-teal)] shadow-[0_0_5px_rgba(0,212,170,0.6)]"
+                        : answered && wasCorrect
+                        ? "bg-[var(--accent-green)]"
+                        : answered && !wasCorrect
+                        ? "bg-[var(--accent-pink)]"
+                        : "bg-[var(--border-default)]"
+                    }`}
+                  />
+                );
+              })}
             </div>
           </div>
 

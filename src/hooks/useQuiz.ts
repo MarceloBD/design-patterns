@@ -71,29 +71,39 @@ export function useQuiz(quiz: PatternQuiz) {
     }));
   }, []);
 
-  const submitQuiz = useCallback((): QuizResult => {
+  const submitQuiz = useCallback((lastAnswer?: { questionId: string; optionId: string }): QuizResult => {
     const timeSpent = Math.round((Date.now() - startTimeRef.current) / 1000);
-    let correctCount = 0;
+    let computedResult: QuizResult | null = null;
 
-    for (const question of state.shuffledQuestions) {
-      if (state.selectedAnswers[question.id] === question.correctOptionId) {
-        correctCount++;
+    setState((previous) => {
+      const answers = lastAnswer
+        ? { ...previous.selectedAnswers, [lastAnswer.questionId]: lastAnswer.optionId }
+        : previous.selectedAnswers;
+
+      let correctCount = 0;
+      for (const question of previous.shuffledQuestions) {
+        if (answers[question.id] === question.correctOptionId) {
+          correctCount++;
+        }
       }
-    }
 
-    const percentage = Math.round((correctCount / totalQuestions) * 100);
-    const result: QuizResult = {
-      patternSlug: quiz.patternSlug,
-      score: correctCount,
-      totalQuestions,
-      percentage,
-      passed: percentage >= quiz.passingScore,
-      timeSpent,
-    };
+      const total = previous.shuffledQuestions.length;
+      const percentage = Math.round((correctCount / total) * 100);
+      const result: QuizResult = {
+        patternSlug: quiz.patternSlug,
+        score: correctCount,
+        totalQuestions: total,
+        percentage,
+        passed: percentage >= quiz.passingScore,
+        timeSpent,
+      };
 
-    setState((previous) => ({ ...previous, isSubmitted: true, result }));
-    return result;
-  }, [quiz, state.selectedAnswers, state.shuffledQuestions, totalQuestions]);
+      computedResult = result;
+      return { ...previous, selectedAnswers: answers, isSubmitted: true, result };
+    });
+
+    return computedResult!;
+  }, [quiz.patternSlug, quiz.passingScore]);
 
   const resetQuiz = useCallback(() => {
     startTimeRef.current = Date.now();

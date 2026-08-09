@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback, useState, useEffect } from "react";
+import { useRef, useCallback, useEffect } from "react";
 
 interface EvasiveBossProps {
   sprite: React.ReactNode;
@@ -11,10 +11,10 @@ interface EvasiveBossProps {
 
 export function EvasiveBoss({ sprite, idleAnimation, areaRadius = 60, evasionSpeed = 0.15 }: EvasiveBossProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const moverRef = useRef<HTMLDivElement>(null);
   const positionRef = useRef({ x: 0, y: 0 });
   const targetRef = useRef({ x: 0, y: 0 });
   const animationFrameRef = useRef<number>(0);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
   const isReturningRef = useRef(false);
 
   const handleMouseMove = useCallback((event: MouseEvent) => {
@@ -36,16 +36,17 @@ export function EvasiveBoss({ sprite, idleAnimation, areaRadius = 60, evasionSpe
       const angle = Math.atan2(mouseY, mouseX);
       const pushStrength = Math.max(0, 1 - distanceToMouse / evasionRange);
 
-      const targetX = -Math.cos(angle) * areaRadius * pushStrength;
-      const targetY = -Math.sin(angle) * areaRadius * pushStrength;
+      let targetX = -Math.cos(angle) * areaRadius * pushStrength;
+      let targetY = -Math.sin(angle) * areaRadius * pushStrength;
 
       const clampedDistance = Math.sqrt(targetX * targetX + targetY * targetY);
       if (clampedDistance > areaRadius) {
         const scale = areaRadius / clampedDistance;
-        targetRef.current = { x: targetX * scale, y: targetY * scale };
-      } else {
-        targetRef.current = { x: targetX, y: targetY };
+        targetX *= scale;
+        targetY *= scale;
       }
+
+      targetRef.current = { x: targetX, y: targetY };
     } else {
       isReturningRef.current = true;
       targetRef.current = { x: 0, y: 0 };
@@ -61,7 +62,10 @@ export function EvasiveBoss({ sprite, idleAnimation, areaRadius = 60, evasionSpe
     const newY = currentY + (targetY - currentY) * speed;
 
     positionRef.current = { x: newX, y: newY };
-    setOffset({ x: newX, y: newY });
+
+    if (moverRef.current) {
+      moverRef.current.style.transform = `translate(${newX}px, ${newY}px)`;
+    }
 
     animationFrameRef.current = requestAnimationFrame(animate);
   }, [evasionSpeed]);
@@ -78,14 +82,10 @@ export function EvasiveBoss({ sprite, idleAnimation, areaRadius = 60, evasionSpe
 
   return (
     <div ref={containerRef} className="relative mx-auto mb-4 w-20 h-20">
-      <div
-        className="w-20 h-20 transition-none"
-        style={{
-          animation: idleAnimation,
-          transform: `translate(${offset.x}px, ${offset.y}px)`,
-        }}
-      >
-        {sprite}
+      <div ref={moverRef} className="w-20 h-20">
+        <div className="w-full h-full" style={{ animation: idleAnimation }}>
+          {sprite}
+        </div>
       </div>
     </div>
   );
