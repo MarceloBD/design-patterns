@@ -1,8 +1,8 @@
 "use client";
 
 import { useGameStore } from "@/hooks/useGameStore";
-import { getXpToNextLevel, getLevelForXp } from "@/data/levels";
 import { FlameIcon } from "@/components/icons";
+import { HeroCustomization } from "@/components/interactive/HeroCustomization";
 
 export function PlayerStats() {
   const { player, isHydrated } = useGameStore();
@@ -17,8 +17,6 @@ export function PlayerStats() {
     );
   }
 
-  const levelInfo = getLevelForXp(player.currentXp);
-  const xpProgress = getXpToNextLevel(player.currentXp);
   const progressPercentage = Math.round((player.completedPatterns.length / 22) * 100);
   const isActive = player.completedPatterns.length > 0;
 
@@ -53,37 +51,11 @@ export function PlayerStats() {
             <h3 className="text-4xl font-extrabold tracking-tight text-[var(--text-primary)] mt-2 mb-1">
               {player.playerName || "Unknown"}
             </h3>
-
-            <div className="flex items-center gap-3 mt-1">
-              <span className="text-[12px] font-bold text-[var(--accent-teal)] italic font-[var(--font-display)]">
-                {levelInfo.title}
-              </span>
-              <span className="text-[10px] text-[var(--text-muted)]">&middot;</span>
-              <span className="text-[11px] font-mono text-[var(--text-muted)]">
-                Lv.{player.level}
-              </span>
-            </div>
           </div>
 
-          <div className="px-7 py-5">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">XP</span>
-              <div className="flex-1 h-px bg-[var(--border-default)]" />
-              <span className="text-[12px] font-mono font-bold text-[var(--accent-green)]">
-                {xpProgress.current}<span className="text-[var(--text-muted)] font-normal">/{xpProgress.required}</span>
-              </span>
-            </div>
-            <div className="xp-bar-dungeon rounded-sm relative h-[14px]">
-              <div className="xp-bar-fill-dungeon" style={{ width: `${xpProgress.progress}%` }} />
-              <div className="xp-segments absolute inset-0 flex">
-                {Array.from({ length: 12 }).map((_, index) => (
-                  <div key={index} className="xp-segment" />
-                ))}
-              </div>
-            </div>
-            <p className="text-[9px] font-mono text-[var(--text-muted)] mt-1.5 text-right tracking-wider">
-              {player.currentXp} total
-            </p>
+          {/* Hero Customization */}
+          <div className="px-7 py-4 border-t border-[var(--border-default)]">
+            <HeroCustomization />
           </div>
 
           <div className="border-t border-[var(--border-default)] px-7 py-4 flex items-center">

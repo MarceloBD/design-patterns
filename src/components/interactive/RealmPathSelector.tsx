@@ -38,7 +38,7 @@ const REALM_PATHS: RealmPath[] = [
       background: "linear-gradient(135deg, #1a0500 0%, #2d0a00 20%, #1a0800 50%, #0d0400 80%, #0a0200 100%)",
     },
     bgStyleLight: {
-      background: "linear-gradient(135deg, #fef3e8 0%, #fde6d0 20%, #fef0e0 50%, #fff8f2 80%, #ffffff 100%)",
+      background: "linear-gradient(135deg, #2d1000 0%, #3a1500 20%, #2d1200 50%, #1a0a00 80%, #0d0400 100%)",
     },
   },
   {
@@ -55,7 +55,7 @@ const REALM_PATHS: RealmPath[] = [
       background: "linear-gradient(135deg, #000a1a 0%, #001530 20%, #000d1f 50%, #000812 80%, #000408 100%)",
     },
     bgStyleLight: {
-      background: "linear-gradient(135deg, #e8f4ff 0%, #d4ecff 20%, #e6f2ff 50%, #f2f9ff 80%, #ffffff 100%)",
+      background: "linear-gradient(135deg, #001a3a 0%, #002550 20%, #001530 50%, #000d20 80%, #000810 100%)",
     },
   },
   {
@@ -72,7 +72,7 @@ const REALM_PATHS: RealmPath[] = [
       background: "linear-gradient(135deg, #0d0019 0%, #1a0033 20%, #0f001f 50%, #080012 80%, #040008 100%)",
     },
     bgStyleLight: {
-      background: "linear-gradient(135deg, #f5eaff 0%, #eddcff 20%, #f2e8ff 50%, #f9f4ff 80%, #ffffff 100%)",
+      background: "linear-gradient(135deg, #1a0030 0%, #2a0050 20%, #1a0035 50%, #100020 80%, #080010 100%)",
     },
   },
 ];
@@ -194,15 +194,11 @@ export function RealmPathSelector() {
               {/* Weather particles */}
               <RealmWeather category={realm.category} />
 
-              {/* Ambient glow */}
+              {/* Ambient glow on hover */}
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"
                 style={{ background: `radial-gradient(ellipse at 50% 80%, ${realm.glowColor}, transparent 60%)` }}
               />
-
-              {/* Gradient overlay for text readability */}
-              <div className={`absolute inset-0 ${theme === "light" ? "bg-gradient-to-r from-white/80 via-white/40 to-transparent" : "bg-gradient-to-r from-black/70 via-black/30 to-transparent"}`} />
-              <div className={`absolute inset-0 ${theme === "light" ? "bg-gradient-to-t from-white/70 via-transparent to-white/20" : "bg-gradient-to-t from-black/60 via-transparent to-black/20"}`} />
 
               {/* Content */}
               <div className="relative z-10 h-full flex flex-col justify-end p-8 sm:p-12 lg:p-16 max-w-4xl">
@@ -224,12 +220,12 @@ export function RealmPathSelector() {
                   {realm.title}
                 </h2>
 
-                <p className="text-[12px] sm:text-[13px] uppercase tracking-[0.2em] text-[var(--text-faint)] mb-4">
+                <p className="text-[12px] sm:text-[13px] uppercase tracking-[0.2em] text-white/40 mb-4">
                   {realm.subtitle}
                 </p>
 
                 {/* Lore */}
-                <p className="text-[13px] sm:text-[14px] leading-[1.8] text-[var(--text-muted)] max-w-lg mb-4 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+                <p className="text-[13px] sm:text-[14px] leading-[1.8] text-white/50 max-w-lg mb-4 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
                   {realm.lore}
                 </p>
 

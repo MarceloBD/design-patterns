@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef, useSyncExternalStore } from "react";
-import { PlayerState } from "@/types/player";
+import { PlayerState, HeroAppearance } from "@/types/player";
 import { PatternCategory, PatternStatus } from "@/types/pattern";
 import { QuizResult } from "@/types/quiz";
 import { XP_REWARDS } from "@/data/levels";
@@ -27,6 +27,7 @@ type Listener = () => void;
 const listeners = new Set<Listener>();
 let globalPlayer: PlayerState = loadPlayerState();
 let hydrated = false;
+const serverSnapshot: PlayerState = loadPlayerState();
 
 function emitChange() {
   listeners.forEach((listener) => listener());
@@ -42,7 +43,7 @@ function getSnapshot(): PlayerState {
 }
 
 function getServerSnapshot(): PlayerState {
-  return loadPlayerState();
+  return serverSnapshot;
 }
 
 function persistGlobal(newState: PlayerState) {
@@ -196,6 +197,14 @@ export function useGameStore() {
     emitChange();
   }, []);
 
+  const updateAppearance = useCallback(
+    (appearance: HeroAppearance) => {
+      const current = playerRef.current;
+      persist({ ...current, heroAppearance: appearance });
+    },
+    [persist]
+  );
+
   return {
     player,
     isHydrated,
@@ -208,5 +217,6 @@ export function useGameStore() {
     updatePlayer,
     handleCollectCoin,
     refreshPlayer,
+    updateAppearance,
   };
 }

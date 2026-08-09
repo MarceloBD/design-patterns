@@ -1,3 +1,12 @@
+export interface HeroAppearance {
+  skinColor: string;
+  hairStyle: string;
+  hairColor: string;
+  hat: string;
+  shirt: string;
+  pants: string;
+}
+
 export interface PlayerState {
   playerName: string;
   currentXp: number;
@@ -12,6 +21,7 @@ export interface PlayerState {
   collectedCoins: string[];
   inventory: string[];
   activeEffects: string[];
+  heroAppearance: HeroAppearance;
 }
 
 export interface LevelDefinition {

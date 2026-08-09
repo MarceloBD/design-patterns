@@ -20,6 +20,14 @@ const DEFAULT_PLAYER: PlayerState = {
   collectedCoins: [],
   inventory: [],
   activeEffects: [],
+  heroAppearance: {
+    skinColor: "#f4c794",
+    hairStyle: "short",
+    hairColor: "#4a3728",
+    hat: "none",
+    shirt: "tunic-green",
+    pants: "brown",
+  },
 };
 
 export function loadPlayerState(): PlayerState {

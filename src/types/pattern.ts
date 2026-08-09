@@ -9,6 +9,11 @@ export interface GlossaryTerm {
   definition: string;
 }
 
+export interface SecretPage {
+  title: string;
+  sections: { heading: string; content: string }[];
+}
+
 export interface PatternContent {
   slug: string;
   name: string;
@@ -26,6 +31,7 @@ export interface PatternContent {
   codeExample: string;
   highlightLines?: number[];
   diagramDescription: string;
+  secretPage?: SecretPage;
 }
 
 export interface PatternMetadata {

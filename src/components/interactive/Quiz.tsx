@@ -12,6 +12,8 @@ import { VictoryScreen } from "@/components/interactive/VictoryScreen";
 import { SHOP_ITEMS } from "@/data/shop-items";
 import { getNextPattern } from "@/data/patterns";
 import { useSound } from "@/hooks/useSound";
+import { getBossForCategory } from "@/data/boss-sprites";
+import { EvasiveBoss } from "@/components/interactive/EvasiveBoss";
 
 const SECONDS_PER_QUESTION = 30;
 const FREEZE_DURATION = 15;
@@ -275,6 +277,8 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
     );
   }
 
+  const bossData = getBossForCategory(category);
+
   /* Start screen */
   if (!hasStarted) {
     return (
@@ -287,6 +291,13 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
                 Boss Challenge
               </span>
             </div>
+
+            {/* Boss Sprite - evades mouse */}
+            <EvasiveBoss sprite={bossData.sprite} idleAnimation={bossData.idleAnimation} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.15em] mb-4" style={{ color: bossData.color }}>
+              {bossData.name}
+            </p>
+
             <h3 className="text-2xl font-extrabold tracking-tight text-[var(--text-primary)] mb-3 font-[var(--font-display)] italic">
               Prepare for Battle
             </h3>
@@ -393,26 +404,37 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
             </div>
           </div>
 
-          {/* Boss HP bar */}
+          {/* Boss HP bar with sprite */}
           {hasShowProgress && (
             <div className="mb-4 pt-2">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-[var(--accent-pink)]">
-                  Boss HP
-                </span>
-                <span className="text-[9px] font-mono text-[var(--text-faint)]">
-                  {bossHp}/{totalQuestions}
-                </span>
-              </div>
-              <div className="w-full h-2 rounded-full bg-[var(--surface-overlay)] overflow-hidden">
+              <div className="flex items-center gap-3">
+                {/* Boss sprite in battle */}
                 <div
-                  className={`h-full rounded-full transition-all duration-500 ${bossHit ? "animate-[quiz-hurt_0.3s_ease-out]" : ""}`}
-                  style={{
-                    width: `${(bossHp / totalQuestions) * 100}%`,
-                    backgroundColor: bossHp > totalQuestions * 0.5 ? "var(--accent-pink)" : bossHp > totalQuestions * 0.25 ? "var(--realm-creational)" : "var(--accent-green)",
-                    boxShadow: bossHit ? "0 0 12px rgba(255, 51, 102, 0.5)" : undefined,
-                  }}
-                />
+                  className="w-10 h-10 flex-shrink-0"
+                  style={{ animation: bossHit ? bossData.hitAnimation : bossData.idleAnimation }}
+                >
+                  {bossData.sprite}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[9px] font-semibold uppercase tracking-[0.15em]" style={{ color: bossData.color }}>
+                      {bossData.name}
+                    </span>
+                    <span className="text-[9px] font-mono text-[var(--text-faint)]">
+                      {bossHp}/{totalQuestions}
+                    </span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-[var(--surface-overlay)] overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${bossHit ? "animate-[quiz-hurt_0.3s_ease-out]" : ""}`}
+                      style={{
+                        width: `${(bossHp / totalQuestions) * 100}%`,
+                        backgroundColor: bossHp > totalQuestions * 0.5 ? bossData.color : bossHp > totalQuestions * 0.25 ? "var(--realm-creational)" : "var(--accent-green)",
+                        boxShadow: bossHit ? `0 0 12px ${bossData.color}` : undefined,
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           )}

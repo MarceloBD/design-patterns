@@ -3,11 +3,17 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 
 const SPEED_STORAGE_KEY = "tts-speed";
+const VOICE_STORAGE_KEY = "tts-voice";
 
 function getStoredSpeed(): number {
   if (typeof window === "undefined") return 1;
   const stored = localStorage.getItem(SPEED_STORAGE_KEY);
   return stored ? parseFloat(stored) : 1;
+}
+
+function getStoredVoiceName(): string {
+  if (typeof window === "undefined") return "";
+  return localStorage.getItem(VOICE_STORAGE_KEY) ?? "";
 }
 
 export function useSpeech() {
@@ -17,6 +23,8 @@ export function useSpeech() {
   const [currentWord, setCurrentWord] = useState<string | null>(null);
   const [currentWordIndex, setCurrentWordIndex] = useState(-1);
   const [speed, setSpeedState] = useState(getStoredSpeed);
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [selectedVoiceName, setSelectedVoiceName] = useState(getStoredVoiceName);
   const intentionalStopRef = useRef(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const activeSectionRef = useRef<string | null>(null);
@@ -28,7 +36,15 @@ export function useSpeech() {
   isPausedRef.current = isPaused;
 
   useEffect(() => {
+    function loadVoices() {
+      const available = window.speechSynthesis?.getVoices() ?? [];
+      const englishVoices = available.filter((v) => v.lang.startsWith("en"));
+      setVoices(englishVoices.length > 0 ? englishVoices : available);
+    }
+    loadVoices();
+    window.speechSynthesis?.addEventListener("voiceschanged", loadVoices);
     return () => {
+      window.speechSynthesis?.removeEventListener("voiceschanged", loadVoices);
       window.speechSynthesis?.cancel();
     };
   }, []);
@@ -36,6 +52,11 @@ export function useSpeech() {
   const setSpeed = useCallback((newSpeed: number) => {
     setSpeedState(newSpeed);
     localStorage.setItem(SPEED_STORAGE_KEY, String(newSpeed));
+  }, []);
+
+  const setVoice = useCallback((voiceName: string) => {
+    setSelectedVoiceName(voiceName);
+    localStorage.setItem(VOICE_STORAGE_KEY, voiceName);
   }, []);
 
   const clearState = useCallback(() => {
@@ -73,10 +94,13 @@ export function useSpeech() {
     utterance.pitch = 1;
     utterance.lang = "en-US";
 
-    const voices = window.speechSynthesis.getVoices();
-    const englishVoice = voices.find((voice) => voice.lang.startsWith("en") && voice.localService);
-    if (englishVoice) {
-      utterance.voice = englishVoice;
+    const availableVoices = window.speechSynthesis.getVoices();
+    const storedName = getStoredVoiceName();
+    const selectedVoice = storedName
+      ? availableVoices.find((v) => v.name === storedName)
+      : availableVoices.find((v) => v.lang.startsWith("en") && v.localService);
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
     }
 
     utterance.onboundary = (event) => {
@@ -130,5 +154,8 @@ export function useSpeech() {
     activeSection,
     speed,
     setSpeed,
+    voices,
+    selectedVoiceName,
+    setVoice,
   };
 }

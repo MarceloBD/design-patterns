@@ -15,6 +15,7 @@ import { AlertIcon, LightbulbIcon, CodeIcon, TargetIcon, CheckIcon, SkullIcon } 
 import { HiddenCoin } from "@/components/interactive/HiddenCoin";
 import { PatternComparisonCard } from "@/components/interactive/PatternComparisonCard";
 import { getComparisonsForPattern } from "@/data/pattern-comparisons";
+import { SECRET_PAGES } from "@/data/secret-pages";
 
 interface QuestContentProps {
   content: PatternContent;
@@ -32,7 +33,7 @@ const QUEST_PHASES = [
 
 export function QuestContent({ content, quiz }: QuestContentProps) {
   const { handleReadPattern, player, isHydrated } = useGameStore();
-  const { speak, isSpeaking, isPaused, currentWordIndex, activeSection, speed, setSpeed } = useSpeech();
+  const { speak, isSpeaking, isPaused, currentWordIndex, activeSection, speed, setSpeed, voices, selectedVoiceName, setVoice } = useSpeech();
   const [visiblePhases, setVisiblePhases] = useState<Set<string>>(new Set(["hook"]));
   const [showObjectives, setShowObjectives] = useState(false);
 
@@ -76,6 +77,7 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
   }, []);
 
   const isCompleted = player.completedPatterns.includes(content.slug);
+  const secretPage = SECRET_PAGES[content.slug];
 
   return (
     <article className="max-w-3xl mx-auto relative" data-hydrated="true">
@@ -114,7 +116,7 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
 
       {/* Speech speed configuration */}
       <div className="mb-6 flex justify-end">
-        <SpeechSpeedConfig speed={speed} onSpeedChange={setSpeed} />
+        <SpeechSpeedConfig speed={speed} onSpeedChange={setSpeed} voices={voices} selectedVoiceName={selectedVoiceName} onVoiceChange={setVoice} />
       </div>
 
       {/* Lore Prologue */}
@@ -299,6 +301,41 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
         </div>
         <Quiz quiz={quiz} category={content.category} />
       </section>
+
+      {/* Secret Page - revealed after defeating the boss */}
+      {isCompleted && secretPage && (
+        <section className="mt-12 mb-8">
+          <div className="rounded-xl border overflow-hidden" style={{ borderColor: "var(--border-lore)", background: "var(--surface-lore)" }}>
+            <div className="px-6 py-4 border-b" style={{ borderColor: "var(--border-lore)" }}>
+              <div className="flex items-center gap-3">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-[var(--text-lore-accent)]">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <div>
+                  <span className="text-[8px] font-semibold uppercase tracking-[0.3em] block" style={{ color: "var(--text-lore-accent)" }}>
+                    Secret Page Unlocked
+                  </span>
+                  <span className="text-[13px] font-bold italic" style={{ color: "var(--text-lore-accent)" }}>
+                    {secretPage.title}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="p-6 space-y-5">
+              {secretPage.sections.map((section, index) => (
+                <div key={index}>
+                  <h4 className="text-[11px] font-bold uppercase tracking-[0.1em] mb-1.5" style={{ color: "var(--text-lore-accent)" }}>
+                    {section.heading}
+                  </h4>
+                  <p className="text-[12px] leading-[1.9]" style={{ color: "var(--text-lore)" }}>
+                    {section.content}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </article>
   );
 }

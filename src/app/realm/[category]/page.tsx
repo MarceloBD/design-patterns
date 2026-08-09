@@ -104,12 +104,12 @@ export default async function RealmPage({ params }: RealmPageProps) {
               {info.name}
             </h1>
 
-            <p className="text-[13px] leading-[1.8] text-[var(--text-muted)] max-w-lg mb-2">
+            <p className="text-[13px] leading-[1.8] text-white/60 max-w-lg mb-2">
               {info.description}
             </p>
-            <p className="text-[11px] italic text-[var(--text-faint)]">{theme.lore}</p>
+            <p className="text-[11px] italic text-white/40">{theme.lore}</p>
 
-            <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--accent-teal)] mt-4 block">
+            <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-400 mt-4 block">
               &gt; Complete in order to unlock
             </span>
           </div>
