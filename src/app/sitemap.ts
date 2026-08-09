@@ -33,5 +33,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...realmPages, ...questPages];
+  const finalBossPages: MetadataRoute.Sitemap = getAllCategories().map((category) => ({
+    url: `${SITE_URL}/final-boss/${category}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...realmPages, ...questPages, ...finalBossPages];
 }

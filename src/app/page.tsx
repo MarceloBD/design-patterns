@@ -2,6 +2,8 @@ import { Navigation } from "@/components/Navigation";
 import { PlayerStats } from "@/components/interactive/PlayerStats";
 import { RealmCard } from "@/components/interactive/RealmCard";
 import { NamePrompt } from "@/components/interactive/NamePrompt";
+import { ProgressSync } from "@/components/interactive/ProgressSync";
+import { SecretBossReveal } from "@/components/interactive/SecretBossReveal";
 import { Footer } from "@/components/Footer";
 import Link from "next/link";
 
@@ -47,6 +49,14 @@ export default function HomePage() {
             <RealmCard category="structural" />
             <RealmCard category="behavioral" />
           </div>
+        </section>
+
+        <div className="separator-dungeon my-14" />
+
+        <SecretBossReveal />
+
+        <section aria-label="Progress sync">
+          <ProgressSync />
         </section>
       </main>
       <Footer />

@@ -21,8 +21,18 @@ interface QuizState {
   shuffledQuestions: QuizQuestion[];
 }
 
+function shuffleQuestionOptions(questions: QuizQuestion[]): QuizQuestion[] {
+  return questions.map((question) => ({
+    ...question,
+    options: shuffleArray(question.options),
+  }));
+}
+
 export function useQuiz(quiz: PatternQuiz) {
-  const initialQuestions = useMemo(() => shuffleArray(quiz.questions), [quiz.questions]);
+  const initialQuestions = useMemo(
+    () => shuffleQuestionOptions(shuffleArray(quiz.questions)),
+    [quiz.questions]
+  );
 
   const [state, setState] = useState<QuizState>({
     currentQuestionIndex: 0,
@@ -93,7 +103,7 @@ export function useQuiz(quiz: PatternQuiz) {
       isSubmitted: false,
       result: null,
       startTime: Date.now(),
-      shuffledQuestions: shuffleArray(quiz.questions),
+      shuffledQuestions: shuffleQuestionOptions(shuffleArray(quiz.questions)),
     });
   }, [quiz.questions]);
 

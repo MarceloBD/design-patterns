@@ -6,6 +6,7 @@ import { useGameStore } from "@/hooks/useGameStore";
 import { getXpToNextLevel } from "@/data/levels";
 import { SwordIcon, MapIcon, MenuIcon, CloseIcon, CoinIcon } from "@/components/icons";
 import { SoundToggle } from "@/components/SoundToggle";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Navigation() {
   const { player, isHydrated } = useGameStore();
@@ -38,6 +39,7 @@ export function Navigation() {
                 Realms
               </Link>
               <SoundToggle />
+              <ThemeToggle />
             </div>
 
             {isHydrated && player.playerName ? (
@@ -148,6 +150,12 @@ export function Navigation() {
                 </div>
               </div>
             )}
+
+            <div className="mt-4 pt-4 border-t border-[var(--border-default)] flex items-center gap-4 px-3">
+              <SoundToggle />
+              <ThemeToggle />
+              <span className="text-[9px] text-[var(--text-faint)] uppercase">Preferences</span>
+            </div>
           </div>
         </div>
       </div>

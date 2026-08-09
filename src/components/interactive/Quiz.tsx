@@ -57,6 +57,7 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
   const [showTimerWarning, setShowTimerWarning] = useState(false);
   const [bossHp, setBossHp] = useState(totalQuestions);
   const [bossHit, setBossHit] = useState(false);
+  const [eliminatedOptions, setEliminatedOptions] = useState<Set<string>>(new Set());
 
   const ownedItems = (player.inventory ?? [])
     .map((id) => SHOP_ITEMS.find((item) => item.id === id))
@@ -142,6 +143,7 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
 
       setTimeout(() => {
         setFeedback("idle");
+        setEliminatedOptions(new Set());
         if (isLastQuestion) {
           handleFinalSubmit();
         } else {
@@ -156,11 +158,13 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
         if (newHearts <= 0) {
           setTimeout(() => {
             setFeedback("idle");
+            setEliminatedOptions(new Set());
             handleFinalSubmit(true);
           }, ANSWER_FEEDBACK_DELAY);
         } else {
           setTimeout(() => {
             setFeedback("idle");
+            setEliminatedOptions(new Set());
             if (isLastQuestion) {
               handleFinalSubmit();
             } else {
@@ -181,6 +185,7 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
     setTimeRemaining(totalTime);
     setIsFrozen(false);
     setUsedActiveItems(new Set());
+    setEliminatedOptions(new Set());
     setShowTimerWarning(false);
     setHearts(maxHearts);
     setFeedback("idle");
@@ -202,10 +207,19 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
         setIsFrozen(true);
         setTimeout(() => setIsFrozen(false), FREEZE_DURATION * 1000);
         break;
-      case "hint-eliminate-one":
+      case "hint-eliminate-one": {
+        const incorrectOptions = currentQuestion.options.filter(
+          (option) => option.id !== currentQuestion.correctOptionId
+        );
+        if (incorrectOptions.length > 0) {
+          const randomIncorrect = incorrectOptions[Math.floor(Math.random() * incorrectOptions.length)];
+          setEliminatedOptions((previous) => new Set([...previous, randomIncorrect.id]));
+        }
+        play("coin");
         break;
+      }
     }
-  }, [usedActiveItems]);
+  }, [usedActiveItems, currentQuestion, play]);
 
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
@@ -311,6 +325,10 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
   }
 
   const answeredCount = Object.keys(selectedAnswers).length;
+  const correctCount = Object.entries(selectedAnswers).filter(([questionId, optionId]) => {
+    const question = quiz.questions.find((q) => q.id === questionId);
+    return question && question.correctOptionId === optionId;
+  }).length;
   const feedbackBorder = feedback === "correct"
     ? "border-[var(--accent-green)] shadow-[0_0_20px_rgba(0,232,70,0.15)]"
     : feedback === "wrong"
@@ -339,7 +357,7 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
                 </span>
                 {hasShowProgress && (
                   <span className="text-[9px] font-mono text-[var(--accent-green)]">
-                    {answeredCount}/{totalQuestions} answered
+                    {correctCount} correct &middot; {currentQuestionIndex + 1}/{totalQuestions}
                   </span>
                 )}
               </div>
@@ -405,13 +423,13 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
               Question {currentQuestionIndex + 1} of {totalQuestions}
             </span>
             <div className="flex gap-1.5">
-              {quiz.questions.map((_, index) => (
+              {Array.from({ length: totalQuestions }).map((_, index) => (
                 <div
                   key={index}
                   className={`w-2 h-2 rounded-full transition-all ${
                     index === currentQuestionIndex
                       ? "bg-[var(--accent-teal)] shadow-[0_0_5px_rgba(0,212,170,0.6)]"
-                      : selectedAnswers[quiz.questions[index].id]
+                      : index < currentQuestionIndex
                       ? "bg-[var(--accent-green)]"
                       : "bg-[var(--border-default)]"
                   }`}
@@ -429,6 +447,19 @@ export function Quiz({ quiz, category = "behavioral" }: QuizProps) {
               const isSelected = selectedAnswers[currentQuestion.id] === option.id;
               const showCorrect = feedback !== "idle" && option.id === currentQuestion.correctOptionId;
               const showWrong = feedback === "wrong" && isSelected && option.id !== currentQuestion.correctOptionId;
+              const isEliminated = eliminatedOptions.has(option.id);
+
+              if (isEliminated) {
+                return (
+                  <div
+                    key={option.id}
+                    className="w-full text-left p-3.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-overlay)]/50 opacity-40"
+                  >
+                    <span className="text-[12px] leading-[1.6] text-[var(--text-faint)] line-through">{option.text}</span>
+                    <span className="ml-2 text-[8px] uppercase text-[var(--accent-pink)] font-semibold">eliminated</span>
+                  </div>
+                );
+              }
 
               return (
                 <button

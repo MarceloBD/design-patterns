@@ -62,6 +62,31 @@ export function resetPlayerState(): void {
   localStorage.removeItem(STORAGE_KEY);
 }
 
+export function exportProgress(): string {
+  const state = loadPlayerState();
+  const exportData = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    data: state,
+  };
+  return JSON.stringify(exportData);
+}
+
+export function importProgress(jsonString: string): { success: boolean; error?: string } {
+  try {
+    const parsed = JSON.parse(jsonString);
+    if (!parsed.version || !parsed.data) {
+      return { success: false, error: "Invalid file format" };
+    }
+    const state: PlayerState = { ...DEFAULT_PLAYER, ...parsed.data };
+    const validated = validateState(state);
+    savePlayerState(validated);
+    return { success: true };
+  } catch {
+    return { success: false, error: "Could not parse file" };
+  }
+}
+
 export function addXp(state: PlayerState, xp: number): PlayerState {
   const newXp = state.currentXp + xp;
   const newLevel = getLevelForXp(newXp);

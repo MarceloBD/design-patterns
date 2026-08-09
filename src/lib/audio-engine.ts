@@ -8,6 +8,7 @@ interface AudioEngineState {
   currentOscillators: OscillatorNode[];
   loopTimeout: ReturnType<typeof setTimeout> | null;
   isPlaying: boolean;
+  pendingMusic: ("creational" | "structural" | "behavioral" | "boss") | null;
 }
 
 const state: AudioEngineState = {
@@ -18,6 +19,7 @@ const state: AudioEngineState = {
   currentOscillators: [],
   loopTimeout: null,
   isPlaying: false,
+  pendingMusic: null,
 };
 
 function getContext(): AudioContext {
@@ -31,13 +33,61 @@ function getContext(): AudioContext {
     state.sfxGain.connect(state.context.destination);
   }
   if (state.context.state === "suspended") {
-    state.context.resume();
+    state.context.resume().then(() => {
+      if (state.pendingMusic && !state.isPlaying && !state.isMuted) {
+        const realm = state.pendingMusic;
+        state.pendingMusic = null;
+        playBackgroundMusic(realm);
+      }
+    });
   }
   return state.context;
 }
 
-const FADE_IN = 0.08;
-const FADE_OUT = 0.12;
+function warmUpContext(): void {
+  if (!state.context) {
+    getContext();
+  } else if (state.context.state === "suspended") {
+    state.context.resume().then(() => {
+      if (state.pendingMusic && !state.isPlaying && !state.isMuted) {
+        const realm = state.pendingMusic;
+        state.pendingMusic = null;
+        playBackgroundMusic(realm);
+      }
+    });
+  }
+}
+
+function setupInteractionListener(): void {
+  if (typeof window === "undefined") return;
+
+  let initialized = false;
+
+  const initOnInteraction = () => {
+    if (!initialized) {
+      initialized = true;
+      warmUpContext();
+    } else if (state.context && state.context.state === "suspended") {
+      state.context.resume().then(() => {
+        if (state.pendingMusic && !state.isPlaying && !state.isMuted) {
+          const realm = state.pendingMusic;
+          state.pendingMusic = null;
+          playBackgroundMusic(realm);
+        }
+      });
+    }
+  };
+
+  window.addEventListener("pointerdown", initOnInteraction, { passive: true });
+  window.addEventListener("keydown", initOnInteraction, { once: true, passive: true });
+}
+
+if (typeof window !== "undefined") {
+  setupInteractionListener();
+}
+
+const FADE_IN = 0.02;
+const FADE_OUT = 0.06;
 
 function playNote(frequency: number, duration: number, type: OscillatorType, gainNode: GainNode, delay = 0): OscillatorNode {
   const context = getContext();
@@ -70,9 +120,15 @@ export function playBackgroundMusic(realm: "creational" | "structural" | "behavi
 
   stopBackgroundMusic();
 
-  getContext();
+  const context = getContext();
   if (!state.backgroundGain) return;
 
+  if (context.state === "suspended") {
+    state.pendingMusic = realm;
+    return;
+  }
+
+  state.pendingMusic = null;
   state.isPlaying = true;
 
   const patterns: Record<string, { notes: number[]; duration: number; type: OscillatorType }> = {

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { PatternCategory } from "@/types/pattern";
 import { TrophyIcon, SparklesIcon } from "@/components/icons";
+import { useGameStore } from "@/hooks/useGameStore";
+import { isSecretBossUnlocked } from "@/data/secret-boss";
 
 interface VictoryScreenProps {
   category: PatternCategory;
@@ -62,6 +64,8 @@ const DEFEATED_BOSS: Record<PatternCategory, { svg: React.ReactNode; name: strin
 
 export function VictoryScreen({ category, score, totalQuestions, percentage, xpEarned, badgesEarned, leveledUp, timeSpent, nextPatternSlug }: VictoryScreenProps) {
   const [phase, setPhase] = useState<"flash" | "boss" | "text" | "rewards" | "complete">("flash");
+  const { player, isHydrated } = useGameStore();
+  const secretBossJustUnlocked = isHydrated && isSecretBossUnlocked(player.completedPatterns);
 
   useEffect(() => {
     const timers = [
@@ -183,6 +187,23 @@ export function VictoryScreen({ category, score, totalQuestions, percentage, xpE
             >
               Next Challenge &rarr;
             </Link>
+          )}
+
+          {secretBossJustUnlocked && !nextPatternSlug && (
+            <div className="mt-6 pt-4 border-t border-purple-500/20 animate-[fade-in_2s_ease-out]">
+              <p className="text-[10px] text-purple-300/80 italic mb-3">
+                A dark presence stirs... Something ancient has awakened.
+              </p>
+              <Link
+                href="/secret-boss"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/40 text-purple-300 text-[11px] font-semibold uppercase tracking-wider hover:from-purple-600/30 hover:to-pink-600/30 transition-all"
+              >
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 2L13 8H18L14 12L16 18L10 14L4 18L6 12L2 8H7L10 2Z" />
+                </svg>
+                Enter the Unknown
+              </Link>
+            </div>
           )}
         </div>
       )}

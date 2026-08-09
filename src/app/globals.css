@@ -68,6 +68,39 @@
 }
 
 html { color-scheme: dark; }
+html[data-theme="light"] { color-scheme: light; }
+
+[data-theme="light"] {
+  --surface-deep: #f8f9fc;
+  --surface-base: #ffffff;
+  --surface-raised: #f3f5f9;
+  --surface-overlay: #edf0f5;
+  --surface-elevated: #e8ecf2;
+
+  --border-subtle: #e2e6ee;
+  --border-default: #d0d6e2;
+  --border-muted: #bcc4d4;
+
+  --text-primary: #1a202c;
+  --text-muted: #4a5568;
+  --text-faint: #718096;
+
+  --accent-teal: #059e7e;
+  --accent-teal-light: #0bc19b;
+  --accent-teal-dark: #047a62;
+  --accent-blue: #5a6bef;
+  --accent-blue-light: #7c8bff;
+  --accent-pink: #e8245a;
+  --accent-green: #10b840;
+  --accent-green-dark: #0d8c30;
+
+  --realm-creational: #e06020;
+  --realm-creational-dark: #b84400;
+  --realm-structural: #2080e8;
+  --realm-structural-dark: #0050b0;
+  --realm-behavioral: #a020e0;
+  --realm-behavioral-dark: #7000a8;
+}
 
 body {
   background: var(--surface-base);
@@ -89,6 +122,13 @@ body::before {
     radial-gradient(circle at 15% 70%, rgba(204, 68, 255, 0.015) 0%, transparent 35%);
 }
 
+[data-theme="light"] body::before {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(5, 158, 126, 0.04) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(90, 107, 239, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 15% 70%, rgba(160, 32, 224, 0.02) 0%, transparent 35%);
+}
+
 /* Scanlines */
 body::after {
   content: "";
@@ -97,6 +137,10 @@ body::after {
   pointer-events: none;
   z-index: 100;
   background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0, 0, 0, 0.03) 4px, rgba(0, 0, 0, 0.03) 5px);
+}
+
+[data-theme="light"] body::after {
+  background: none;
 }
 
 /* ========== XP BAR ========== */
@@ -417,6 +461,78 @@ body::after {
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
+}
+
+/* ========== SECRET BOSS ========== */
+@keyframes screen-shake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-4px, -2px); }
+  20% { transform: translate(4px, 2px); }
+  30% { transform: translate(-3px, 3px); }
+  40% { transform: translate(3px, -3px); }
+  50% { transform: translate(-2px, 2px); }
+  60% { transform: translate(2px, -1px); }
+  70% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  90% { transform: translate(0, 1px); }
+}
+
+@keyframes boss-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes boss-hit {
+  0% { transform: translateX(0) scale(1); }
+  20% { transform: translateX(15px) scale(0.92); filter: brightness(2); }
+  40% { transform: translateX(-8px) scale(0.96); }
+  60% { transform: translateX(4px) scale(0.98); }
+  100% { transform: translateX(0) scale(1); filter: brightness(1); }
+}
+
+@keyframes boss-attack {
+  0% { transform: translateX(0) scale(1); }
+  30% { transform: translateX(-20px) scale(1.15); }
+  50% { transform: translateX(30px) scale(1.1); }
+  70% { transform: translateX(-5px) scale(1.02); }
+  100% { transform: translateX(0) scale(1); }
+}
+
+@keyframes boss-charge {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.08); filter: brightness(1.3); }
+}
+
+@keyframes ember-fall {
+  0% { transform: translateY(-10px) translateX(0); opacity: 1; }
+  50% { transform: translateY(50vh) translateX(30px); opacity: 0.8; }
+  100% { transform: translateY(105vh) translateX(-20px); opacity: 0; }
+}
+
+@keyframes rain-fall {
+  0% { transform: translateY(-10px); opacity: 0.8; }
+  100% { transform: translateY(105vh); opacity: 0.2; }
+}
+
+@keyframes monster-drift {
+  0% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(30px) translateY(-15px); }
+  100% { transform: translateX(-10px) translateY(5px); }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.1; }
+  100% { transform: translateY(-20px) rotate(10deg); opacity: 0.05; }
 }
 
 /* ========== SCROLLBAR ========== */

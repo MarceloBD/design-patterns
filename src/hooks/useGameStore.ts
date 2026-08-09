@@ -191,6 +191,11 @@ export function useGameStore() {
     [persist]
   );
 
+  const refreshPlayer = useCallback(() => {
+    globalPlayer = loadPlayerState();
+    emitChange();
+  }, []);
+
   return {
     player,
     isHydrated,
@@ -202,5 +207,6 @@ export function useGameStore() {
     getProgress,
     updatePlayer,
     handleCollectCoin,
+    refreshPlayer,
   };
 }

@@ -32,7 +32,7 @@ const QUEST_PHASES = [
 
 export function QuestContent({ content, quiz }: QuestContentProps) {
   const { handleReadPattern, player, isHydrated } = useGameStore();
-  const { speak, isSpeaking, currentWordIndex, activeSection, speed, setSpeed } = useSpeech();
+  const { speak, isSpeaking, isPaused, currentWordIndex, activeSection, speed, setSpeed } = useSpeech();
   const [visiblePhases, setVisiblePhases] = useState<Set<string>>(new Set(["hook"]));
   const [showObjectives, setShowObjectives] = useState(false);
 
@@ -129,7 +129,7 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
                 <p className="text-[20px] font-extrabold italic tracking-tight text-[var(--text-primary)] leading-[1.6] font-[var(--font-display)]">
                   &ldquo;<HighlightedText text={content.hook} currentWordIndex={currentWordIndex} isActive={activeSection === "hook"} />&rdquo;
                 </p>
-                <SpeechButton onClick={() => speak(content.hook, "hook")} isActive={isSpeaking && activeSection === "hook"} />
+                <SpeechButton onClick={() => speak(content.hook, "hook")} isActive={isSpeaking && activeSection === "hook"} isPaused={isPaused && activeSection === "hook"} />
               </div>
             </div>
           </div>
@@ -145,7 +145,7 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
                 <HighlightedText text={content.analogy} currentWordIndex={currentWordIndex} isActive={activeSection === "analogy"} />
               </p>
             </div>
-            <SpeechButton onClick={() => speak(content.analogy, "analogy")} isActive={isSpeaking && activeSection === "analogy"} />
+            <SpeechButton onClick={() => speak(content.analogy, "analogy")} isActive={isSpeaking && activeSection === "analogy"} isPaused={isPaused && activeSection === "analogy"} />
           </div>
           <HiddenCoin coinId={`${content.slug}-hook`} position="right" />
         </div>
@@ -186,7 +186,7 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
                     Without this pattern...
                   </span>
                 </div>
-                <SpeechButton onClick={() => speak(content.problem, "problem")} isActive={isSpeaking && activeSection === "problem"} />
+                <SpeechButton onClick={() => speak(content.problem, "problem")} isActive={isSpeaking && activeSection === "problem"} isPaused={isPaused && activeSection === "problem"} />
               </div>
               <p className="text-[14px] leading-[2.1] text-[var(--text-muted)] whitespace-pre-line">
                 <HighlightedText text={content.problem} currentWordIndex={currentWordIndex} isActive={activeSection === "problem"} />
@@ -210,7 +210,7 @@ export function QuestContent({ content, quiz }: QuestContentProps) {
                     The pattern reveals...
                   </span>
                 </div>
-                <SpeechButton onClick={() => speak(content.solution, "solution")} isActive={isSpeaking && activeSection === "solution"} />
+                <SpeechButton onClick={() => speak(content.solution, "solution")} isActive={isSpeaking && activeSection === "solution"} isPaused={isPaused && activeSection === "solution"} />
               </div>
               <p className="text-[14px] leading-[2.1] text-[var(--text-muted)] whitespace-pre-line">
                 <HighlightedText text={content.solution} currentWordIndex={currentWordIndex} isActive={activeSection === "solution"} />
